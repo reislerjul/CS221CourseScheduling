@@ -1,7 +1,7 @@
 # CS221CourseScheduling
 Repository for the CS 221 course scheduling project
 
-## Setup
+## Setup ->
 Create conda environment and install requirements:
 ```sh
 conda create --name course_scheduling python=3.7.13 -y
