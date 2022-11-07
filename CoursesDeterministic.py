@@ -1,4 +1,4 @@
-from explorecourses import *
+from explorecourses import CourseConnection
 
 
 class CoursesDeterministic:
