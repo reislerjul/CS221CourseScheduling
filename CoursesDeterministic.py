@@ -21,7 +21,7 @@ class CoursesDeterministic:
     def __init__(
         self,
         years=["2021-2022", "2022-2023"],
-        departments=["CME"],
+        departments=["CS", "EE", "CME"],
         extract_courses=True,
     ):
         """
@@ -120,7 +120,7 @@ class CoursesDeterministic:
                     set(total_term)
                 )
 
-                # Only update for the last year to avoid duplicates
+                # Update for course_by_courter and avoid duplicates
                 for term in total_term:
                     course_by_quarter[term] = list(
                         set(
@@ -131,7 +131,8 @@ class CoursesDeterministic:
         return course_by_quarter
 
 
-new = CoursesDeterministic().course_to_class_database()
-for key, val in new.items():
-    for j in range(len(val)):
-        print(key, val[j].course_name, val[j].course_number, val[j].quarter_indices)
+# A simple test case to see the course outputs
+# new = CoursesDeterministic(departments=["CME"]).course_to_class_database()
+# for key, val in new.items():
+#    for j in range(len(val)):
+#        print(key, val[j].course_name, val[j].course_number, val[j].quarter_indices)
