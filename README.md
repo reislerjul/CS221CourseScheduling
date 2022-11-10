@@ -21,4 +21,13 @@ pre-commit install
 ```sh
 pre-commit run --all-files
 ```
-The END
+
+### Testing
+Run the following from the root of this directory to run all unit tests:
+```sh
+pytest tests/
+```
+or:
+```sh
+python -m pytest tests/
+```
