@@ -1,9 +1,4 @@
-from typing import Set, Dict, Tuple
-
-
-department_requirement = Dict[str, Dict[str, Tuple[int]]]
-
-index_quarter = Dict[int, str]
+from typing import Set, Dict
 
 
 class State:

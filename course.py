@@ -2,7 +2,8 @@
 # and add all the docstring info
 
 from typing import Dict, Set, Tuple
-from CourseScheduler import State
+
+# from course_scheduler import State
 
 
 class Course:
@@ -45,7 +46,9 @@ class ExploreCourse:
         self.class_database = class_database
         self.course_category = course_category
 
-    def get_actions(self, quarter_index: int, remaining_units: int):
+    def get_actions(
+        self, quarter_index: int, remaining_units: int, courses_taken: Set[Course]
+    ) -> Set[Course]:
         """_summary_
 
         Args:
@@ -63,56 +66,3 @@ class ExploreCourse:
         """
 
         raise Exception("Not implemented yet")
-
-
-class FindCourses:
-    """_summary_
-
-    Args:
-        explore_course (ExploreCourse): _description_
-    """
-
-    def __init__(self, explore_course: ExploreCourse) -> None:
-        self.explore_course = explore_course
-
-    def start_state(self, remaining_units: int) -> State:
-        """_summary_
-
-        Args:
-            remaining_units (int): _description_
-
-        Raises:
-            Exception: _description_
-
-        Returns:
-            State: _description_
-        """
-        raise Exception("Not Implemented yet")
-
-    def is_end(self, state: State) -> bool:
-        """_summary_
-
-        Args:
-            state (State): _description_
-
-        Raises:
-            Exception: _description_
-
-        Returns:
-            bool: _description_
-        """
-        raise Exception("Not Implemented yet")
-
-    def successors_and_cost(self, state: State) -> Tuple[State, float]:
-        """_summary_
-
-        Args:
-            state (State): _description_
-
-        Raises:
-            Exception: _description_
-
-        Returns:
-            Tuple[State, float]: _description_
-        """
-        raise Exception("Not Implemented yet")
