@@ -1,7 +1,7 @@
 # TODO Finish all the function implementations
 # and add all the docstring info
 
-from typing import Dict, Set, Tuple
+from typing import Dict, Set
 
 # from course_scheduler import State
 
@@ -36,33 +36,16 @@ class Course:
 
 
 class ExploreCourse:
-    def __init__(self, class_database: Dict[int, Set], course_category: Dict[str, Set]):
+    def __init__(
+        self,
+        class_database: Dict[int, Set[Course]],
+        course_category: Dict[str, Set[Course]],
+    ):
         """_summary_
 
         Args:
-            class_database (Dict[int, Set]): _description_
-            course_category (Dict[str, Set]): _description_
+            class_database (Dict[int, Set]): courses having the same quarter index
+            course_category (Dict[str, Set]): courses having the same units category
         """
         self.class_database = class_database
         self.course_category = course_category
-
-    def get_actions(
-        self, quarter_index: int, remaining_units: int, courses_taken: Set[Course]
-    ) -> Set[Course]:
-        """_summary_
-
-        Args:
-            quarter_index (int): _description_
-            remaining_units (int): _description_
-        """
-
-        raise Exception("Not Implemented yet")
-
-    def get_quarter_cost(self, enrolled_courses: Set[Tuple[str, int]]):
-        """_summary_
-
-        Args:
-            enrolled_courses (Set[Tuple[str, int]]): _description_
-        """
-
-        raise Exception("Not implemented yet")
