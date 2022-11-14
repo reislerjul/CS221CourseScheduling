@@ -1,6 +1,7 @@
 from typing import Tuple, List, Dict, Set
 from course_scheduler import State
 from course import ExploreCourse, Course
+from itertools import combinations
 
 
 class FindCourses:
@@ -25,9 +26,7 @@ class FindCourses:
         self.units_requirement = units_requirement
         self.max_quarter = max_quarter
 
-    def get_actions(
-        self, quarter_index: int, remaining_units: int, courses_taken: Set[Course]
-    ) -> List[Set[Course]]:
+    def get_actions(self, state: State) -> List[List[Course]]:
         """_summary_
         Get filtered actions(course combinations).
         Filters: 1.offered in the quarter, 2.not taken before, 3.satisfy
@@ -45,9 +44,27 @@ class FindCourses:
         Returns:
             Set[Course]: _description_
         """
-        raise Exception("Not Implemented yet")
+        # raise Exception("Not Implemented yet")
+        # Offered in the quarter
+        courses_quarter = self.explore_course.class_database(state.current_quarter)
+        # Not taken before
+        courses_nottaken = [i for i in courses_quarter if i not in state.course_taken]
+        # Combinations
+        combins = combinations(courses_nottaken, 2)
+        actions = []
+        for combin in combins:
+            units = [combin[0].units, combin[1].units]
+            categories = [combin[0].category, combin[1].category]
+            # Quarter 8-10 units
+            if sum(units) <= 10 and sum(units) >= 8:
+                if (
+                    state.remaining_units[categories[0]] >= units[0]
+                    and state.remaining_units[categories[1]] >= units[1]
+                ):
+                    actions.append(List(combin))
+        return actions
 
-    def get_quarter_cost(self, enrolled_courses: Set[Course]) -> float:
+    def get_quarter_cost(self, enrolled_courses: List[Course]) -> float:
         """_summary_
 
         Args:
@@ -59,10 +76,15 @@ class FindCourses:
         Returns:
             float: cost for the combination of course
         """
+        # raise Exception("Not implemented yet")
+        units = [List(enrolled_courses)[0].units, List(enrolled_courses)[1].units]
+        return (
+            sum(units) * 5
+            - units[0] * enrolled_courses[0].reward
+            - units[1] * enrolled_courses[1].reward
+        )
 
-        raise Exception("Not implemented yet")
-
-    def start_state(self, remaining_units: Dict[str, int]) -> State:
+    def start_state(self) -> State:
         """_summary_
 
         Args:
@@ -71,8 +93,8 @@ class FindCourses:
         Returns:
             State: _description_
         """
-        raise Exception("Not Implemented yet")
-        # return State(0, Set(), remaining_units)
+        # raise Exception("Not Implemented yet")
+        return State(0, Set(), self.units_requirement)
 
     def is_end(self, state: State) -> bool:
         """_summary_
@@ -86,11 +108,14 @@ class FindCourses:
         Returns:
             bool: _description_
         """
-        raise Exception("Not Implemented yet")
-        # if state.current_quarter == self.max_quarter or sum(state.remaining_units.values()) == 0:
-        #     return True
-        # else:
-        #     return False
+        # raise Exception("Not Implemented yet")
+        if (
+            state.current_quarter == self.max_quarter
+            or sum(state.remaining_units.values()) == 0
+        ):
+            return True
+        else:
+            return False
 
     def successors_and_cost(
         self, state: State, explorecourse: ExploreCourse
@@ -106,11 +131,23 @@ class FindCourses:
         Returns:
             Tuple[State, float]: _description_
         """
-        raise Exception("Not Implemented yet")
-
-        # succesors = []
-        # actions = explorecourse.get_actions(state.current_quarter, state.remaining_units, state.course_taken)
-        # for action in actions:
-        #     if action not in state.course_taken:
-        #         cost = explorecourse.get_quarter_cost(action)
-        # succesors.append((succesor,cost))
+        # raise Exception("Not Implemented yet")
+        actions = self.get_actions(state)
+        successors = []
+        for action in actions:
+            List(state.course_taken).append(action)
+            suc_current_quarter = state.current_quarter + 1
+            for f, v in list(action[0].units.items()):
+                state.remaining_units[f] = state.remaining_units.get(f, 0) - v
+            for f, v in list(action[1].units.items()):
+                state.remaining_units[f] = state.remaining_units.get(f, 0) - v
+            suc_cost = self.get_quarter_cost(action)
+            successors.append(
+                (
+                    State(
+                        suc_current_quarter, state.course_taken, state.remaining_units
+                    ),
+                    suc_cost,
+                )
+            )
+        return successors
