@@ -86,20 +86,20 @@ class CoursesDeterministic:
                             "reward": 0,
                             "units_min": course.units_min,
                             "units_max": course.units_max,
-                            "course_number": str(course.course_id),
+                            "course_number": str(course.code),
                             "course_name": course.title,
                         }
 
-                        total_term = []
+                        total_term = set()
                         for j in range(len(course.sections)):
                             _, term = course.sections[j].term.split()
-                            total_term.append(term)
+                            total_term.add(term)
 
                         # If the course isn't offered any of the terms, don't add it.
                         if not total_term:
                             continue
 
-                        single_course_object["quarters"] = total_term
+                        single_course_object["quarters"] = list(total_term)
                         course_by_dept_list.append(single_course_object)
 
                     course_by_dept = pd.DataFrame(course_by_dept_list)
@@ -140,8 +140,6 @@ class CoursesDeterministic:
                 for _, row in cur_course.iterrows():
                     # Iterate through all courses without duplicates
                     if row["course_number"] not in self.all_courses:
-                        print(type(row["quarters"]))
-
                         terms = [
                             4 * year_ind + QUARTER_TO_INDEX[term]
                             for term in row["quarters"]
@@ -162,6 +160,7 @@ class CoursesDeterministic:
                             4 * year_ind + QUARTER_TO_INDEX[term]
                             for term in row["quarters"]
                         ]
+
                         self.all_courses[row["course_number"]].quarter_indices = tuple(
                             set(prev_terms + terms)
                         )
