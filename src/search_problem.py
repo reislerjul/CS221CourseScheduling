@@ -26,6 +26,34 @@ class FindCourses:
         self.units_requirement = units_requirement
         self.max_quarter = max_quarter
 
+    def club_courses(
+        self,
+        curr_courses: Set[Course],
+        number_units: int,
+        course_available: Set[Course],
+        candidate_courses: Set[Set[Course]],
+    ) -> None:
+        if number_units == 10:
+            candidate_courses.add(curr_courses)
+            return
+
+        for course in course_available:
+            for unit in course.units:
+                if number_units + unit <= 10 and course not in curr_courses:
+                    curr_courses.add(course)
+                    self.club_courses(
+                        curr_courses,
+                        number_units + course.units,
+                        course_available,
+                        candidate_courses,
+                    )
+                    curr_courses.remove(course)
+
+        if number_units >= 8:
+            if number_units == 10:
+                candidate_courses.add(curr_courses)
+                return
+
     def get_actions(self, state: State) -> List[List[Course]]:
         """_summary_
         Get filtered actions(course combinations).
@@ -46,12 +74,13 @@ class FindCourses:
         """
         # raise Exception("Not Implemented yet")
         # Offered in the quarter
-        courses_quarter = self.explore_course.class_database(state.current_quarter)
+        courses_offered = self.explore_course.class_database(state.current_quarter)
         # Not taken before
-        courses_nottaken = [i for i in courses_quarter if i not in state.course_taken]
+        candiate_courses = courses_offered - state.course_taken
         # Combinations
-        combins = combinations(courses_nottaken, 2)
+        combins = combinations(candiate_courses, 2)
         actions = []
+
         for combin in combins:
             units = [combin[0].units, combin[1].units]
             categories = [combin[0].category, combin[1].category]

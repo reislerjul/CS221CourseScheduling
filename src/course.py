@@ -1,4 +1,4 @@
-from typing import Dict, Set
+from typing import Dict, Set, Tuple
 
 
 class Course:
@@ -16,11 +16,11 @@ class Course:
     def __init__(
         self,
         reward: float,
-        units: tuple,
+        units: Tuple,
         course_number: str,
         course_name: str,
         course_category: str,
-        quarter_indices: tuple,
+        quarter_indices: Tuple,
     ) -> None:
 
         self.reward = reward
