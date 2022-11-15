@@ -103,6 +103,8 @@ class CoursesDeterministic:
                     course_by_dept = pd.DataFrame(course_by_dept_list)
                     course_by_dept.to_pickle(year_dept_filepath)
                     print("File saved to ", year_dept_filepath)
+                else:
+                    print(f"Using existing pickle file for {year} {dept}.")
 
         print("Extraction ended! Start processing courses...")
 

@@ -1,6 +1,6 @@
 import pytest
 
-from ..courses_deterministic import CoursesDeterministic
+from src.courses_deterministic import CoursesDeterministic
 
 
 COURSE_YEARS = ["2021-2022", "2022-2023", "2023-2024"]
