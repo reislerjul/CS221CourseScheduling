@@ -1,6 +1,8 @@
 import argparse
 from typing import List
 
+from src.courses_deterministic import CoursesDeterministic
+
 
 def main(
     data_directory: str = "data",
@@ -18,8 +20,11 @@ def main(
     print(f"BEGIN Course Scheduling for program: {program} and years: {years}.")
 
     # Step 1: Load in the course data.
-    # course_loader = CoursesDeterministic(data_directory=data_directory, program=program, years=years)
-    # course_loader.run()
+    course_loader = CoursesDeterministic(
+        output_dir=data_directory, departments=[program], years=years
+    )
+    course_by_quarter = course_loader.run()
+    print(f"Populated {len(course_by_quarter)} quarters.")
 
     # Step 2: Initialize the problem.
 
