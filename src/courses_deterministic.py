@@ -1,10 +1,10 @@
-import pickle
 import collections
 import os
 import pandas as pd
 from explorecourses import CourseConnection
 from .course import Course
 
+from ast import literal_eval
 from typing import Dict, List
 
 QUARTER_TO_INDEX = {
@@ -60,13 +60,11 @@ class CoursesDeterministic:
         for year in self.years:
             for dept in self.depts:
 
-                year_dept_filepath = os.path.join(
-                    self.output_dir, f"{year}_{dept}.pickle"
-                )
+                year_dept_filepath = os.path.join(self.output_dir, f"{year}_{dept}.csv")
 
                 if not os.path.exists(year_dept_filepath):
                     print(
-                        f"No pickle file available for {year} {dept}, will extract from explorecourses."
+                        f"No file available for {year} {dept}, will extract from explorecourses."
                     )
                     print("Connecting to explorecourses...")
 
@@ -97,11 +95,16 @@ class CoursesDeterministic:
                             _, term = course.sections[j].term.split()
                             total_term.append(term)
 
+                        # If the course isn't offered any of the terms, don't add it.
+                        if not total_term:
+                            continue
+
                         single_course_object["quarters"] = total_term
                         course_by_dept_list.append(single_course_object)
 
                     course_by_dept = pd.DataFrame(course_by_dept_list)
-                    course_by_dept.to_pickle(year_dept_filepath)
+
+                    course_by_dept.to_csv(year_dept_filepath)
                     print("File saved to ", year_dept_filepath)
                 else:
                     print(f"Using existing pickle file for {year} {dept}.")
@@ -123,18 +126,22 @@ class CoursesDeterministic:
             for dept in self.depts:
                 # Read in courses by the specified years and departments
 
-                year_dept_filepath = os.path.join(
-                    self.output_dir, f"{year}_{dept}.pickle"
-                )
+                year_dept_filepath = os.path.join(self.output_dir, f"{year}_{dept}.csv")
                 if not os.path.exists(year_dept_filepath):
                     raise Exception(f"{year_dept_filepath} does not exist!")
 
-                with open(year_dept_filepath, "rb") as handle:
-                    cur_course = pickle.load(handle)
+                cur_course = pd.read_csv(year_dept_filepath)
+
+                # When storing as csv, the list gets converted to a string. So we have to convert it back.
+                cur_course["quarters"] = cur_course.apply(
+                    lambda row: literal_eval(row["quarters"]), axis=1
+                )
 
                 for _, row in cur_course.iterrows():
                     # Iterate through all courses without duplicates
                     if row["course_number"] not in self.all_courses:
+                        print(type(row["quarters"]))
+
                         terms = [
                             4 * year_ind + QUARTER_TO_INDEX[term]
                             for term in row["quarters"]
