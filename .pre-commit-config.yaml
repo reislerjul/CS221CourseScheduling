@@ -27,6 +27,7 @@ repos:
     hooks:
     -   id: pytest-check
         name: pytest-check
+        args: [tests/]
         stages: [commit]
         types: [python]
         entry: pytest
