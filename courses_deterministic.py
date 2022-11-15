@@ -5,6 +5,8 @@ import pandas as pd
 from explorecourses import CourseConnection
 from .course import Course
 
+from typing import Dict, List
+
 QUARTER_TO_INDEX = {
     "Autumn": 1,
     "Winter": 2,
@@ -40,8 +42,6 @@ class CoursesDeterministic:
         self.output_dir = output_dir
         # self.all_courses is used for easier lookup between course number and course object
         self.all_courses = {}
-        # course_by_quarter stores dict[quarter_indices] = [list of course objects]
-        self.course_by_quarter = collections.defaultdict(list)
 
     def run(self):
         """
@@ -54,18 +54,21 @@ class CoursesDeterministic:
         # Store the information extracted from explorecourses api to .csv files for easier lookup
 
         if not os.path.exists(self.output_dir):
-            print("Creating new path to", self.output_dir)
-            os.mkdir(self.output_dir)
+            print("Creating new path to ", self.output_dir)
+            os.makedirs(self.output_dir)
 
         for year in self.years:
             for dept in self.depts:
-                if not os.path.exists(
-                    os.path.join(self.output_dir, f"{year}_{dept}.pickle")
-                ):
-                    print("No pickle file available, will extract from explorecourses.")
+
+                year_dept_filepath = os.path.join(
+                    self.output_dir, f"{year}_{dept}.pickle"
+                )
+
+                if not os.path.exists(year_dept_filepath):
+                    print(
+                        f"No pickle file available for {year} {dept}, will extract from explorecourses."
+                    )
                     print("Connecting to explorecourses...")
-                    print("Current extracting years:", year)
-                    print("Current extracting departments:", dept)
 
                     cur_courses = self.connect.get_courses_by_department(
                         dept, year=year
@@ -98,34 +101,35 @@ class CoursesDeterministic:
                         course_by_dept_list.append(single_course_object)
 
                     course_by_dept = pd.DataFrame(course_by_dept_list)
-                    course_by_dept.to_pickle(
-                        os.path.join(self.output_dir, f"{year}_{dept}.pickle")
-                    )
-                    print(
-                        "File saved to",
-                        os.path.join(self.output_dir, f"{year}_{dept}.pickle"),
-                    )
+                    course_by_dept.to_pickle(year_dept_filepath)
+                    print("File saved to ", year_dept_filepath)
 
         print("Extraction ended! Start processing courses...")
 
         # convert courses to class Course by quarter
-        self.course_to_class_database()
+        return self.course_to_class_database()
 
-        return self.course_by_quarter
-
-    def course_to_class_database(self):
+    def course_to_class_database(self) -> Dict[int, List[Course]]:
         """
         Convert the extracted courses to dict[quarter_number] = (all courses available in the quarter)
         """
+        # course_by_quarter stores dict[quarter_indices] = [list of course objects]
+        course_by_quarter = collections.defaultdict(list)
 
         for year_ind in range(len(self.years)):
             year = self.years[year_ind]
             for dept in self.depts:
                 # Read in courses by the specified years and departments
-                with open(
-                    os.path.join(self.output_dir, f"{year}_{dept}.pickle"), "rb"
-                ) as handle:
+
+                year_dept_filepath = os.path.join(
+                    self.output_dir, f"{year}_{dept}.pickle"
+                )
+                if not os.path.exists(year_dept_filepath):
+                    raise Exception(f"{year_dept_filepath} does not exist!")
+
+                with open(year_dept_filepath, "rb") as handle:
                     cur_course = pickle.load(handle)
+
                 for _, row in cur_course.iterrows():
                     # Iterate through all courses without duplicates
                     if row["course_number"] not in self.all_courses:
@@ -156,7 +160,9 @@ class CoursesDeterministic:
         # Sort by quarter
         for _, course in self.all_courses.items():
             for term in course.quarter_indices:
-                self.course_by_quarter[term].append(course)
+                course_by_quarter[term].append(course)
+
+        return course_by_quarter
 
 
 # A simple test case to see the course outputs
