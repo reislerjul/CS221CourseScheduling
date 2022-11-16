@@ -43,8 +43,5 @@ class ExploreCourse:
             class_database (Dict[int, Set]): courses having the same quarter index
             course_category (Dict[str, Set]): courses having the same units category
         """
-        self.class_database = (
-            class_database
-            # This is called in 'search_problem.py', not sure about API
-        )
+        self.class_database = class_database
         self.course_category = course_category

@@ -9,3 +9,7 @@ DEPARTMENT_REQUIREMENT: Dict[str, Dict[str, int]] = {
 }
 
 INDEX_QUARTER: Dict[int, str] = {}
+
+MIN_UNITS_PER_QUARTER = 8
+MAX_UNITS_PER_QUARTER = 12
+MAX_CLASS_REWARD = 5

@@ -1,7 +1,10 @@
-from typing import Tuple, List, Dict, Set
-from course_scheduler import State
-from course import ExploreCourse, Course
+from typing import Tuple, List, Dict
+from .course_scheduler import State
+from .course import ExploreCourse, Course
 from itertools import combinations
+import copy
+
+from .constants import MIN_UNITS_PER_QUARTER, MAX_UNITS_PER_QUARTER, MAX_CLASS_REWARD
 
 
 class FindCourses:
@@ -26,35 +29,7 @@ class FindCourses:
         self.units_requirement = units_requirement
         self.max_quarter = max_quarter
 
-    def club_courses(
-        self,
-        curr_courses: Set[Course],
-        number_units: int,
-        course_available: Set[Course],
-        candidate_courses: Set[Set[Course]],
-    ) -> None:
-        if number_units == 10:
-            candidate_courses.add(curr_courses)
-            return
-
-        for course in course_available:
-            for unit in course.units:
-                if number_units + unit <= 10 and course not in curr_courses:
-                    curr_courses.add(course)
-                    self.club_courses(
-                        curr_courses,
-                        number_units + course.units,
-                        course_available,
-                        candidate_courses,
-                    )
-                    curr_courses.remove(course)
-
-        if number_units >= 8:
-            if number_units == 10:
-                candidate_courses.add(curr_courses)
-                return
-
-    def get_actions(self, state: State) -> List[List[Course]]:
+    def _get_actions(self, state: State) -> List[List[Tuple[Course, int]]]:
         """_summary_
         Get filtered actions(course combinations).
         Filters: 1.offered in the quarter, 2.not taken before, 3.satisfy
@@ -72,32 +47,57 @@ class FindCourses:
         Returns:
             Set[Course]: _description_
         """
-        # raise Exception("Not Implemented yet")
-        # Offered in the quarter
-        courses_offered = self.explore_course.class_database(state.current_quarter)
+        # Offered in the next quarter
+        courses_offered = self.explore_course.class_database[state.current_quarter + 1]
+
         # Not taken before
-        candiate_courses = courses_offered - state.course_taken
+        candidate_courses = list(set(courses_offered) - set(state.course_taken))
+
+        # TODO: remove this logic; it is only here for MVP
+        # Only get courses where min is >=3 units and max is <=5 units, and courses where the
+        # course number is >=200
+        candidate_courses = [
+            course
+            for course in candidate_courses
+            if course.units[0] >= 3 and course.units[1] <= 5
+        ]
+        candidate_courses = [
+            course
+            for course in candidate_courses
+            if int("".join(filter(str.isdigit, course.course_number))) >= 200
+        ]
+
+        # Filter to courses that satisfy remaining requirements
+        candidate_courses = [
+            course
+            for course in candidate_courses
+            if state.remaining_units[course.course_category] > 0
+        ]
+
         # Combinations
-        combins = combinations(candiate_courses, 2)
+        combins = combinations(candidate_courses, 2)
         actions = []
 
         for combin in combins:
-            units = [combin[0].units, combin[1].units]
-            categories = [combin[0].category, combin[1].category]
-            # Quarter 8-10 units
-            if sum(units) <= 10 and sum(units) >= 8:
-                if (
-                    state.remaining_units[categories[0]] >= units[0]
-                    and state.remaining_units[categories[1]] >= units[1]
-                ):
-                    actions.append(List(combin))
+            course1 = combin[0]
+            course2 = combin[1]
+
+            for units1 in range(course1.units[0], course1.units[1] + 1):
+                for units2 in range(course2.units[0], course2.units[1] + 1):
+
+                    if (
+                        units1 + units2 >= MIN_UNITS_PER_QUARTER
+                        and units1 + units2 <= MAX_UNITS_PER_QUARTER
+                    ):
+                        actions.append([(course1, units1), (course2, units2)])
+
         return actions
 
-    def get_quarter_cost(self, enrolled_courses: List[Course]) -> float:
+    def _get_quarter_cost(self, enrolled_courses: List[Tuple[Course, int]]) -> float:
         """_summary_
 
         Args:
-            enrolled_courses (Set[Tuple[str, int]]): a combination of course
+            enrolled_courses (List[Tuple[Course, int]]): a combination of course
 
         Raises:
             Exception: _description_
@@ -105,13 +105,14 @@ class FindCourses:
         Returns:
             float: cost for the combination of course
         """
-        # raise Exception("Not implemented yet")
-        units = [List(enrolled_courses)[0].units, List(enrolled_courses)[1].units]
-        return (
-            sum(units) * 5
-            - units[0] * enrolled_courses[0].reward
-            - units[1] * enrolled_courses[1].reward
-        )
+        total_units = 0.0
+        total_rewards = 0.0
+
+        for course_and_unit in enrolled_courses:
+            total_units += course_and_unit[1]
+            total_rewards += course_and_unit[1] * course_and_unit[0].reward
+
+        return total_units * MAX_CLASS_REWARD - total_rewards
 
     def start_state(self) -> State:
         """_summary_
@@ -123,7 +124,7 @@ class FindCourses:
             State: _description_
         """
         # raise Exception("Not Implemented yet")
-        return State(0, Set(), self.units_requirement)
+        return State(0, [], self.units_requirement)
 
     def is_end(self, state: State) -> bool:
         """_summary_
@@ -146,9 +147,7 @@ class FindCourses:
         else:
             return False
 
-    def successors_and_cost(
-        self, state: State, explorecourse: ExploreCourse
-    ) -> List[Tuple[State, float]]:
+    def successors_and_cost(self, state: State) -> List[Tuple[State, float]]:
         """_summary_
 
         Args:
@@ -160,23 +159,26 @@ class FindCourses:
         Returns:
             Tuple[State, float]: _description_
         """
-        # raise Exception("Not Implemented yet")
-        actions = self.get_actions(state)
+        actions = self._get_actions(state)
         successors = []
+
         for action in actions:
-            List(state.course_taken).append(action)
             suc_current_quarter = state.current_quarter + 1
-            for f, v in list(action[0].units.items()):
-                state.remaining_units[f] = state.remaining_units.get(f, 0) - v
-            for f, v in list(action[1].units.items()):
-                state.remaining_units[f] = state.remaining_units.get(f, 0) - v
-            suc_cost = self.get_quarter_cost(action)
+            suc_remaining_units = copy.deepcopy(state.remaining_units)
+
+            courses_this_quarter = []
+            for course, units in action:
+                suc_remaining_units[course.course_category] -= units
+                courses_this_quarter.append(course)
+
+            suc_courses_taken = state.course_taken + courses_this_quarter
+            suc_cost = self._get_quarter_cost(action)
+
             successors.append(
                 (
-                    State(
-                        suc_current_quarter, state.course_taken, state.remaining_units
-                    ),
+                    State(suc_current_quarter, suc_courses_taken, suc_remaining_units),
                     suc_cost,
                 )
             )
+
         return successors
