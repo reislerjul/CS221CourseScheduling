@@ -47,9 +47,9 @@ class CoursesDeterministic:
         """
         Currently only extracting courses from CS, EE and ICME department
 
-        Check if course information pickle exists: if yes, extract from explorecourses api;
+        Check if course information file exists: if yes, extract from explorecourses api;
         extract from file otherwise. Output courses sorted by year and department in
-        self.output_dir/{year}_{dept}.pickle
+        self.output_dir/{year}_{dept}.csv
         """
         # Store the information extracted from explorecourses api to .csv files for easier lookup
 
@@ -107,7 +107,7 @@ class CoursesDeterministic:
                     course_by_dept.to_csv(year_dept_filepath)
                     print("File saved to ", year_dept_filepath)
                 else:
-                    print(f"Using existing pickle file for {year} {dept}.")
+                    print(f"Using existing file for {year} {dept}.")
 
         print("Extraction ended! Start processing courses...")
 
@@ -144,11 +144,14 @@ class CoursesDeterministic:
                             4 * year_ind + QUARTER_TO_INDEX[term]
                             for term in row["quarters"]
                         ]
+
+                        # TODO: insert real course category
                         self.all_courses[row["course_number"]] = Course(
                             0,
                             (row["units_min"], row["units_max"]),
                             row["course_number"],
                             row["course_name"],
+                            "depth",
                             tuple(set(terms)),
                         )
                     # Add same courses offered in the new year

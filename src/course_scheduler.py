@@ -1,4 +1,4 @@
-from typing import Set, Dict
+from typing import Dict, List
 
 
 class State:
@@ -11,7 +11,7 @@ class State:
     """
 
     def __init__(
-        self, current_quarter: int, course_taken: Set, remaining_units: Dict[str, int]
+        self, current_quarter: int, course_taken: List, remaining_units: Dict[str, int]
     ) -> None:
         self.current_quarter = current_quarter
         self.course_taken = course_taken
