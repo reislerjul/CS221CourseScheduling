@@ -2,7 +2,7 @@ import argparse
 from typing import List
 
 from src.courses_deterministic import CoursesDeterministic
-from src.constants import DEPARTMENT_REQUIREMENT
+from src.constants import DEPARTMENT_REQUIREMENT, INDEX_QUARTER
 from src.search_problem import FindCourses, UniformCostSearch
 from src.course import ExploreCourse
 
@@ -12,6 +12,7 @@ def main(
     program: str = "CS",
     years: List[str] = ["2021-2022", "2022-2023"],
     max_quarter: int = 8,
+    max_successors: int = 5,
     verbose: int = 0,
 ):
     """
@@ -38,7 +39,10 @@ def main(
     explore_course = ExploreCourse(course_by_quarter, {})
     department_requirement = DEPARTMENT_REQUIREMENT[program]
     search_problem = FindCourses(
-        explore_course, department_requirement, max_quarter=max_quarter
+        explore_course,
+        department_requirement,
+        max_quarter=max_quarter,
+        max_successors=max_successors,
     )
     ucs = UniformCostSearch(verbose=verbose)
 
@@ -49,11 +53,28 @@ def main(
     print("END UCS. Found {} solution.".format("a" if found_solution else "no"))
 
     # Step 4: Store and analyze the output.
-    print("END Course Scheduling.")
+    if ucs.actions is not None:
+        print("PRINTING course schedule...")
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n")
+        for i in range(len(ucs.actions)):
+            season = INDEX_QUARTER[i % len(INDEX_QUARTER)]
+            print(f"** Quarter: {i}, Season: {season} **")
+
+            for course, units in ucs.actions[i]:
+
+                print(
+                    f"Course: {course.course_number} {course.course_name} || Units: {units}"
+                )
+
+            if not ucs.actions[i]:
+                print("Taking this quarter off! :(")
+
+            print()
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+        print("END Course Scheduling.")
 
 
 if __name__ == "__main__":
-
     parser = argparse.ArgumentParser(
         prog="ScheduleCourses",
         description="Create a course schedule for a two year Stanford MS program.",
@@ -81,11 +102,18 @@ if __name__ == "__main__":
         nargs="+",
     )
     parser.add_argument(
-        "-m",
+        "-mq",
         "--max_quarter",
         type=int,
         default=8,
         help="The maximum number of quarters to graduate in.",
+    )
+    parser.add_argument(
+        "-ms",
+        "--max_successors",
+        type=int,
+        default=5,
+        help="The maximum number of successors to return from successors_and_cost.",
     )
     parser.add_argument(
         "-v",

@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 
 # TODO: this is an over-simplification of the degree requirements. For the next version, we need to incorporate
 # a more accurate version of this
@@ -8,7 +8,7 @@ DEPARTMENT_REQUIREMENT: Dict[str, Dict[str, int]] = {
     "ICME": {"foundation": 12, "depth": 0, "breadth": 18, "elective": 15},
 }
 
-INDEX_QUARTER: Dict[int, str] = {}
+INDEX_QUARTER: List[str] = ["Autumn", "Winter", "Spring", "Summer"]
 
 MIN_UNITS_PER_QUARTER = 8
 MAX_UNITS_PER_QUARTER = 12

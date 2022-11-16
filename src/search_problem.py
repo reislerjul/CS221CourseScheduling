@@ -18,6 +18,7 @@ class FindCourses:
         explore_course: ExploreCourse,
         units_requirement: Dict[str, int],
         max_quarter: int,
+        max_successors: int,
     ) -> None:
         """_summary_
 
@@ -29,6 +30,7 @@ class FindCourses:
         self.explore_course = explore_course
         self.units_requirement = units_requirement
         self.max_quarter = max_quarter
+        self.max_successors = max_successors
 
     def _get_actions(self, state: State) -> List[List[Tuple[Course, int]]]:
         """_summary_
@@ -142,7 +144,7 @@ class FindCourses:
         # raise Exception("Not Implemented yet")
         if (
             state.current_quarter == self.max_quarter
-            or sum(state.remaining_units.values()) == 0
+            or sum(state.remaining_units.values()) <= 0
         ):
             return True
         else:
@@ -185,7 +187,22 @@ class FindCourses:
                 )
             )
 
-        return successors
+        if not successors:
+            # If there are no successors, skip the term and set the cost to a high number.
+            successors.append(
+                (
+                    [],
+                    State(
+                        state.current_quarter + 1,
+                        copy.deepcopy(state.course_taken),
+                        copy.deepcopy(state.remaining_units),
+                    ),
+                    1000,
+                )
+            )
+
+        best_successors = sorted(successors, key=lambda x: x[2])[: self.max_successors]
+        return best_successors
 
 
 class UniformCostSearch:
