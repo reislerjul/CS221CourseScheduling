@@ -1,13 +1,7 @@
-# TODO Finish all the function implementations
-# and add all the docstring info
-
-from typing import Dict, Set
-
-# from course_scheduler import State
+from typing import Dict, Set, Tuple
 
 
 class Course:
-    # TODO complete it
     """_summary_
 
 
@@ -22,16 +16,18 @@ class Course:
     def __init__(
         self,
         reward: float,
-        units: tuple,
+        units: Tuple,
         course_number: str,
         course_name: str,
-        quarter_indices: tuple,
+        course_category: str,
+        quarter_indices: Tuple,
     ) -> None:
 
         self.reward = reward
         self.units = units
         self.course_number = course_number
         self.course_name = course_name
+        self.course_category = course_category
         self.quarter_indices = quarter_indices
 
 

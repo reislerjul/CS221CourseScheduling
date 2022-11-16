@@ -23,13 +23,14 @@ repos:
     rev: ''  # Use the sha / tag you want to point at
     hooks:
     -   id: mypy
-#-   repo: local # commented out until Pete has working draft of PyTest checks
-#    hooks:
-#    -   id: pytest-check
-#        name: pytest-check
-#        stages: [commit]
-#        types: [python]
-#        entry: pytest
-#        language: system
-#        pass_filenames: false
-#        always_run: true
+-   repo: local
+    hooks:
+    -   id: pytest-check
+        name: pytest-check
+        args: [tests/]
+        stages: [commit]
+        types: [python]
+        entry: pytest
+        language: system
+        pass_filenames: false
+        always_run: true
