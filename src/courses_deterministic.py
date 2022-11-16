@@ -114,6 +114,15 @@ class CoursesDeterministic:
         # convert courses to class Course by quarter
         return self.course_to_class_database()
 
+    def find_course_category(self, course_number: str) -> str:
+        requirement_file = pd.read_csv("./data/cs_requirements.csv")
+        for _, course in requirement_file.iterrows():
+            number = course[0].split()[1]
+            category = course[0].split()[2]
+            if number == course_number:
+                return category
+        return "elective"
+
     def course_to_class_database(self) -> Dict[int, List[Course]]:
         """
         Convert the extracted courses to dict[quarter_number] = (all courses available in the quarter)
@@ -151,7 +160,7 @@ class CoursesDeterministic:
                             (row["units_min"], row["units_max"]),
                             row["course_number"],
                             row["course_name"],
-                            "depth",
+                            self.find_course_category(row["course_number"]),
                             tuple(set(terms)),
                         )
                     # Add same courses offered in the new year
