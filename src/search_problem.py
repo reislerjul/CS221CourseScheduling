@@ -142,10 +142,7 @@ class FindCourses:
             bool: _description_
         """
         # raise Exception("Not Implemented yet")
-        if (
-            state.current_quarter == self.max_quarter
-            or sum(state.remaining_units.values()) <= 0
-        ):
+        if sum(state.remaining_units.values()) <= 0:
             return True
         else:
             return False
@@ -164,6 +161,9 @@ class FindCourses:
         Returns:
             Tuple[State, float]: _description_
         """
+        if state.current_quarter + 1 > self.max_quarter:
+            return []
+
         actions = self._get_actions(state)
         successors = []
 
