@@ -16,3 +16,19 @@ class State:
         self.current_quarter = current_quarter
         self.course_taken = course_taken
         self.remaining_units = remaining_units
+
+    def print_state(self):
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+        print(f"** Quarter **: {self.current_quarter}")
+        print("---------------")
+
+        print("** Remaining Units: **")
+        for key, value in self.remaining_units.items():
+            if value > 0:
+                print(f"{key}: {value} units")
+        print("---------------")
+
+        print("** Courses taken so far: **")
+        for course in self.course_taken:
+            print(f"{course.course_number} {course.course_name}")
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
