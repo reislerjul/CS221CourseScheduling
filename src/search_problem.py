@@ -222,7 +222,7 @@ class UniformCostSearch:
                 return
 
             # Update tracking variables
-            self.past_costs[state.location] = past_cost
+            self.past_costs[state] = past_cost
             self.num_states_explored += 1
             if self.verbose >= 2:
                 print(f"Exploring {state} with past_cost {past_cost}")
@@ -258,21 +258,27 @@ class PriorityQueue:
         self.heap = []
         self.priorities = {}  # Map from state to priority
 
+        # heapq will compare the second elements in the tuple if there is a tie in the
+        # first element; to prevent this, we will maintain a counter so that if there
+        # are ties, the element inserted first is prioritized
+        self.counter = 0
+
     # Insert `state` into the heap with priority `new_priority` if `state` isn't in
     # the heap or `new_priority` is smaller than the existing priority.
     #   > Return whether the priority queue was updated.
     def update(self, state: State, new_priority: float) -> bool:
-        oldPriority = self.priorities.get(state)
-        if oldPriority is None or new_priority < oldPriority:
+        old_priority = self.priorities.get(state)
+        if old_priority is None or new_priority < old_priority:
             self.priorities[state] = new_priority
-            heapq.heappush(self.heap, (new_priority, state))
+            heapq.heappush(self.heap, (new_priority, self.counter, state))
+            self.counter += 1
             return True
         return False
 
     # Returns (state with minimum priority, priority) or (None, None) if empty.
     def remove_min(self):
         while len(self.heap) > 0:
-            priority, state = heapq.heappop(self.heap)
+            priority, _, state = heapq.heappop(self.heap)
             if self.priorities[state] == self.DONE:
                 # Outdated priority, skip
                 continue
