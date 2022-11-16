@@ -2,12 +2,17 @@ import argparse
 from typing import List
 
 from src.courses_deterministic import CoursesDeterministic
+from src.constants import DEPARTMENT_REQUIREMENT
+from src.search_problem import FindCourses, UniformCostSearch
+from src.course import ExploreCourse
 
 
 def main(
     data_directory: str = "data",
     program: str = "CS",
     years: List[str] = ["2021-2022", "2022-2023"],
+    max_quarter: int = 8,
+    verbose: int = 0,
 ):
     """
     Runs the course scheduling program.
@@ -28,10 +33,22 @@ def main(
 
     # Step 2: Initialize the problem.
 
+    # This second argument to ExploreCourse is never used; we could probably do
+    # away with ExploreCourse and just pass course_by_quarter to FindCourses
+    explore_course = ExploreCourse(course_by_quarter, {})
+    department_requirement = DEPARTMENT_REQUIREMENT[program]
+    search_problem = FindCourses(
+        explore_course, department_requirement, max_quarter=max_quarter
+    )
+    ucs = UniformCostSearch(verbose=verbose)
+
     # Step 3: Run UCS to get the optimal schedule.
+    print("BEGIN UCS.")
+    ucs.solve(search_problem)
+    found_solution = ucs.actions is not None and len(ucs.actions) > 0
+    print("END UCS. Found {} solution.".format("a" if found_solution else "no"))
 
     # Step 4: Store and analyze the output.
-
     print("END Course Scheduling.")
 
 
@@ -62,6 +79,20 @@ if __name__ == "__main__":
         default=["2021-2022", "2022-2023"],
         help='The program years. Each year should be formatted as <YYYY>-<YYYY>. Defaults to "2021-2022 2022-2023".',
         nargs="+",
+    )
+    parser.add_argument(
+        "-m",
+        "--max_quarter",
+        type=int,
+        default=8,
+        help="The maximum number of quarters to graduate in.",
+    )
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        type=int,
+        default=0,
+        help="Whether to run UCS in verbose mode.",
     )
 
     args = parser.parse_args()
