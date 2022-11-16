@@ -64,7 +64,7 @@ class FindCourses:
         candidate_courses = [
             course
             for course in candidate_courses
-            if int("".join(filter(str.isdigit, course.course_number))) >= 200
+            if int("".join(filter(str.isdigit, course.course_number))) >= 100
         ]
 
         # Filter to courses that satisfy remaining requirements
