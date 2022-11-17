@@ -91,7 +91,7 @@ if __name__ == "__main__":
         "--program",
         type=str,
         default="CS",
-        help='The degree program. Should be in {CS, EE, ICME}. Defaults to "CS".',
+        help='The degree program. Should be in {CS, EE, CME}. Defaults to "CS".',
     )
     parser.add_argument(
         "-y",
