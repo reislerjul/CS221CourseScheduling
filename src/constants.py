@@ -5,7 +5,7 @@ from typing import Dict, List
 DEPARTMENT_REQUIREMENT: Dict[str, Dict[str, int]] = {
     "CS": {"foundation": 10, "depth": 27, "breadth": 9, "elective": 0},
     "EE": {"foundation": 0, "depth": 12, "breadth": 9, "elective": 24},
-    "ICME": {"foundation": 12, "depth": 0, "breadth": 18, "elective": 15},
+    "CME": {"foundation": 12, "depth": 0, "breadth": 18, "elective": 15},
 }
 
 INDEX_QUARTER: List[str] = ["Autumn", "Winter", "Spring", "Summer"]

@@ -6,6 +6,7 @@ from .course import Course
 
 from ast import literal_eval
 from typing import Dict, List
+import random
 
 QUARTER_TO_INDEX = {
     "Autumn": 1,
@@ -83,7 +84,7 @@ class CoursesDeterministic:
                         quarter_indices: tuple of available quarters,
                         """
                         single_course_object = {
-                            "reward": 0,
+                            "reward": random.uniform(0, 5),
                             "units_min": course.units_min,
                             "units_max": course.units_max,
                             "course_number": str(course.code),
