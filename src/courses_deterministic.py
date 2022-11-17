@@ -84,7 +84,6 @@ class CoursesDeterministic:
                         quarter_indices: tuple of available quarters,
                         """
                         single_course_object = {
-                            "reward": random.uniform(0, 5),
                             "units_min": course.units_min,
                             "units_max": course.units_max,
                             "course_number": str(course.code),
@@ -157,7 +156,7 @@ class CoursesDeterministic:
 
                         # TODO: insert real course category
                         self.all_courses[row["course_number"]] = Course(
-                            0,
+                            random.uniform(0, 5),
                             (row["units_min"], row["units_max"]),
                             row["course_number"],
                             row["course_name"],
