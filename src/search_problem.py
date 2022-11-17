@@ -54,7 +54,11 @@ class FindCourses:
         courses_offered = self.explore_course.class_database[state.current_quarter + 1]
 
         # Not taken before
-        candidate_courses = list(set(courses_offered) - set(state.course_taken))
+        taken_numbers = set([course.course_number for course in state.course_taken])
+        candidate_courses = []
+        for course in courses_offered:
+            if course.course_number not in taken_numbers:
+                candidate_courses.append(course)
 
         # TODO: remove this logic; it is only here for MVP
         # Only get courses where min is >=3 units and max is <=5 units, and courses where the
