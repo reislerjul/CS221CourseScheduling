@@ -58,7 +58,7 @@ def main(
         print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n")
         for i in range(len(ucs.actions)):
             season = INDEX_QUARTER[i % len(INDEX_QUARTER)]
-            print(f"** Quarter: {i}, Season: {season} **")
+            print(f"** Quarter: {i + 1}, Season: {season} **")
 
             for course, units in ucs.actions[i]:
 
