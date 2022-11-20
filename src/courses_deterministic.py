@@ -43,6 +43,13 @@ class CoursesDeterministic:
         self.output_dir = output_dir
         # self.all_courses is used for easier lookup between course number and course object
         self.all_courses = {}
+        # self.requirement_file loads all the requirements for cs_tracks
+        requirement_path = "./data/cs_requirements.csv"  # TODO later, change this to accommodate for all the deparments
+
+        if os.path.exists(requirement_path):
+            self.requirement_file = pd.read_csv(requirement_path)
+        else:
+            raise FileNotFoundError("Missing department requirement file!")
 
     def run(self):
         """
@@ -115,8 +122,7 @@ class CoursesDeterministic:
         return self.course_to_class_database()
 
     def find_course_category(self, course_number: str) -> str:
-        requirement_file = pd.read_csv("./data/cs_requirements.csv")
-        for _, course in requirement_file.iterrows():
+        for _, course in self.requirement_file.iterrows():
             number = course[0].split()[1]
             category = course[0].split()[2]
             if number == course_number:
