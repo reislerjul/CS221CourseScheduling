@@ -4,7 +4,7 @@ from typing import Tuple
 from ..course import Course
 
 
-TOTAL_UNITS = 45
+TOTAL_UNITS_REQUIRED = 45
 
 
 class DegreeProgram(ABC):

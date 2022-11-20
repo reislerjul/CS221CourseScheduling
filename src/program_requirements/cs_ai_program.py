@@ -3,7 +3,7 @@ import pandas as pd
 from typing import Tuple
 
 from ..course import Course
-from .degree_program import DegreeProgram
+from .degree_program import DegreeProgram, TOTAL_UNITS_REQUIRED
 
 
 class CSAIProgram(DegreeProgram):
@@ -18,24 +18,47 @@ class CSAIProgram(DegreeProgram):
                 f"Cannot find path to program requirements! {program_filepath} does not exist."
             )
 
+        self.total_requirement_units_taken = 0
         self.df_requirements = pd.read_csv(program_filepath)
 
-        print(self.df_requirements)
+        # Foundations
+        self.foundations = self.df_requirements[
+            self.df_requirements["Category"] == "foundation"
+        ]
+        self.foundations_areas_left = set(self.foundations["Subcategory"])
+
+        # Breadth
+        self.breadth = self.df_requirements[
+            self.df_requirements["Category"] == "breadth"
+        ]
+        self.breadth_areas_left = set(self.breadth["Subcategory"])
+
+        # Depth
+        self.depth = self.df_requirements[self.df_requirements["Category"] == "depth"]
+        self.depth_areas_left = {"a": 1, "b": 4}
+        self.depth_units_left = 21
+
+        # Significant Implementation
+        self.significant_implementation_satisfied = False
 
     def _is_foundations_satisfied(self):
-        pass
+        return len(self.foundations_areas_left) == 0
 
     def _is_breadth_satisfied(self):
-        pass
+        return len(self.breadth_areas_left) <= 1
 
     def _is_depth_satisfied(self):
-        pass
+        for value in self.depth_areas_left.values():
+            if value > 0:
+                return False
+
+        return self.depth_units_left <= 0
 
     def _is_significant_implementation_satisfied(self):
-        pass
+        return self.significant_implementation_satisfied
 
-    def _is_electives_satisfied(self):
-        pass
+    def _is_unit_requirement_satisfied(self):
+        return self.total_requirement_units_taken >= TOTAL_UNITS_REQUIRED
 
     def is_program_satisfied(self):
         """
@@ -46,7 +69,7 @@ class CSAIProgram(DegreeProgram):
             and self._is_breadth_satisfied()
             and self._is_depth_satisfied()
             and self._is_significant_implementation_satisfied()
-            and self._is_electives_satisfied()
+            and self._is_unit_requirement_satisfied()
         )
 
     def take_course(self, course_and_units: Tuple[Course, int]):
@@ -65,15 +88,16 @@ class CSAIProgram(DegreeProgram):
         Arguments:
         course_and_units - A course object. Eg <CS 221 object>.
         """
-        foundations = self.df_requirements[
-            self.df_requirements.Category == "foundation"
-        ]
-        if f"{course.course_subject} {course.course_number}" not in set(
-            foundations["Course"]
-        ):
+        full_course_code = f"{course.course_subject} {course.course_number}"
+        if full_course_code not in set(self.foundations["Course"]):
             raise Exception(
                 f"Tried to waive {course.course_subject} {course.course_number}, but cannot waive a non-foundation course."
             )
+        areas_satisfied = self.foundations.loc[
+            self.foundations["Course"] == full_course_code
+        ]["Subcategory"].to_list()
+        for area in areas_satisfied:
+            self.foundations_areas_left = self.foundations_areas_left - {area}
 
     def does_course_satisfy_remaining_requirements(self, course: Course):
         """
