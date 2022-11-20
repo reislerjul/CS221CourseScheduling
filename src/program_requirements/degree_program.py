@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Tuple
+from typing import List, Tuple
 
 from ..course import Course
 
@@ -44,11 +44,14 @@ class DegreeProgram(ABC):
         pass
 
     @abstractmethod
-    def does_course_satisfy_remaining_requirements(self, course: Course):
+    def requirements_satisfied_by_course(self, course: Course) -> List[Tuple[str, str]]:
         """
-        Return true if the course satisfies any requirements that are remaining in the degree program and False otherwise.
+        Returns a list of the remaining requirements that are satisfied by the course.
 
         Arguments:
         course - A Course object. Eg <CS 221 object>.
+
+        Returns:
+        requirements_satisfied - A list of all the requirement/sub-requirements pairs that are satisfied by the course.
         """
         pass
