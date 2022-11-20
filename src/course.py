@@ -10,6 +10,8 @@ class Course:
         units (tuple): _description_
         course_number (str): _description_
         course_name (str): _description_
+        course_subject (str): _description_
+        course_category (str): _description_
         quarter_indices (tuple): _description_
     """
 
@@ -19,6 +21,7 @@ class Course:
         units: Tuple,
         course_number: str,
         course_name: str,
+        course_subject: str,
         course_category: str,
         quarter_indices: Tuple,
     ) -> None:
@@ -27,6 +30,7 @@ class Course:
         self.units = units
         self.course_number = course_number
         self.course_name = course_name
+        self.course_subject = course_subject
         self.course_category = course_category
         self.quarter_indices = quarter_indices
 

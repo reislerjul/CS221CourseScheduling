@@ -88,6 +88,7 @@ class CoursesDeterministic:
                             "units_max": course.units_max,
                             "course_number": str(course.code),
                             "course_name": course.title,
+                            "course_subject": course.subject,
                         }
 
                         total_term = set()
@@ -160,6 +161,7 @@ class CoursesDeterministic:
                             (row["units_min"], row["units_max"]),
                             row["course_number"],
                             row["course_name"],
+                            row["course_subject"],
                             self.find_course_category(row["course_number"]),
                             tuple(set(terms)),
                         )
