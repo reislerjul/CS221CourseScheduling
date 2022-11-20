@@ -67,7 +67,7 @@ class CSAIProgram(DegreeProgram):
         seminars = {"CS 300", "EE 380", "EE 385A"}
 
         department, course_id = course_code.split()
-        course_id_num = int("".join(filter(course_id.isdigit, "aas30dsa20")))
+        course_id_num = int("".join(filter(str.isdigit, course_id)))
 
         # Valid CS elective
         if (
