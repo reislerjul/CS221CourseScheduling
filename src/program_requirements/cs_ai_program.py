@@ -9,6 +9,8 @@ from .degree_program import DegreeProgram, TOTAL_UNITS_REQUIRED
 class CSAIProgram(DegreeProgram):
     def __init__(self, program_filepath):
         """
+        Program requirements are based on https://cs.stanford.edu/degrees/mscs/programsheets/psguide2223.pdf
+
         Arguments:
         program_filepath - path to file containing requirements for the degree program
         """
@@ -27,6 +29,7 @@ class CSAIProgram(DegreeProgram):
             self.df_requirements["Category"] == "foundation"
         ]
         self.foundations_areas_left = set(self.foundations["Subcategory"])
+        self.foundation_units_counted = 0
 
         # Breadth
         self.breadth = self.df_requirements[
@@ -36,19 +39,28 @@ class CSAIProgram(DegreeProgram):
 
         # Depth
         self.depth = self.df_requirements[self.df_requirements["Category"] == "depth"]
-        self.depth_areas_left = {"a": 1, "b": 4}
+        self.depth_areas_left = {"a": 1, "b": 4, "c": 0}
         self.depth_units_left = 21
 
         # Significant Implementation
         self.significant_implementation_satisfied = False
 
     def _is_foundations_satisfied(self) -> bool:
+        """
+        Check whether foundation requirements are satisfied.
+        """
         return len(self.foundations_areas_left) == 0
 
     def _is_breadth_satisfied(self) -> bool:
+        """
+        Check whether breadth requirements are satisfied.
+        """
         return len(self.breadth_areas_left) <= 1
 
     def _is_depth_satisfied(self) -> bool:
+        """
+        Check whether depth requirements are satisfied.
+        """
         for value in self.depth_areas_left.values():
             if value > 0:
                 return False
@@ -56,15 +68,41 @@ class CSAIProgram(DegreeProgram):
         return self.depth_units_left <= 0
 
     def _is_significant_implementation_satisfied(self) -> bool:
+        """
+        Check whether significant implementation requirements are satisfied.
+        """
         return self.significant_implementation_satisfied
 
     def _is_unit_requirement_satisfied(self) -> bool:
+        """
+        Check whether unit requirements are satisfied.
+        """
         return self.total_requirement_units_taken >= TOTAL_UNITS_REQUIRED
 
-    def _is_elective_course(self, course_code) -> bool:
+    def _is_seminar_course(self, course_code: str) -> bool:
+        """
+        Check whether course is a seminar.
+
+        Arguments:
+        course_code: course code for the class, eg "CS 221"
+        """
+        seminars = {"CS 300", "EE 380", "EE 385A"}
+        department, course_id = course_code.split()
+        course_id_num = int("".join(filter(str.isdigit, course_id)))
+        if (department == "CS" and course_id_num >= 500) or course_code in seminars:
+            return True
+
+        return False
+
+    def _is_elective_course(self, course_code: str) -> bool:
+        """
+        Check whether course is an elective.
+
+        Arguments:
+        course_code: course code for the class, eg "CS 221"
+        """
         non_elective_cs = {"CS 196", "CS 198", "CS 390A", "CS 390B", "CS 390C"}
         other_elective_departments = {"EE", "MATH", "STATS"}
-        seminars = {"CS 300", "EE 380", "EE 385A"}
 
         department, course_id = course_code.split()
         course_id_num = int("".join(filter(str.isdigit, course_id)))
@@ -83,11 +121,7 @@ class CSAIProgram(DegreeProgram):
 
         # Seminars
         if self.seminar_units_taken <= 3:
-            if department == "CS" and course_id_num >= 500:
-                return True
-
-            if course_code in seminars:
-                return True
+            return self._is_seminar_course(course_code)
 
         return False
 
@@ -122,12 +156,15 @@ class CSAIProgram(DegreeProgram):
             self.courses_taken.add(full_course_code)
             return
 
+        units_towards_degree = units
         for category, subcategory in requirements_satisfied:
 
             if category == "foundation":
                 self.foundations_areas_left = self.foundations_areas_left - {
                     subcategory
                 }
+                units_towards_degree = min(units, 10 - self.foundation_units_counted)
+                self.foundation_units_counted += units_towards_degree
 
             if category == "breadth":
                 self.breadth_areas_left = self.breadth_areas_left - {subcategory}
@@ -139,7 +176,11 @@ class CSAIProgram(DegreeProgram):
             if category == "significant implementation":
                 self.significant_implementation_satisfied = True
 
-        self.total_requirement_units_taken += units
+        if self._is_seminar_course(full_course_code):
+            units_towards_degree = min(units, 3 - self.seminar_units_taken)
+            self.seminar_units_taken += units_towards_degree
+
+        self.total_requirement_units_taken += units_towards_degree
         self.courses_taken.add(full_course_code)
 
     def waive_course(self, course: Course) -> None:
