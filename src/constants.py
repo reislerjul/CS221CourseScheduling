@@ -1,3 +1,4 @@
+import os
 from typing import Dict, List
 
 # TODO: this is an over-simplification of the degree requirements. For the next version, we need to incorporate
@@ -7,6 +8,8 @@ DEPARTMENT_REQUIREMENT: Dict[str, Dict[str, int]] = {
     "EE": {"foundation": 0, "depth": 12, "breadth": 9, "elective": 24},
     "CME": {"foundation": 12, "depth": 0, "breadth": 18, "elective": 15},
 }
+CS_AI_PROGRAM_FILE = os.path.join("data", "cs_ai_requirements.csv")
+
 
 INDEX_QUARTER: List[str] = ["Autumn", "Winter", "Spring", "Summer"]
 
