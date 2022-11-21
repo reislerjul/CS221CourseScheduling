@@ -1,13 +1,14 @@
-import pytest
+# import pytest
+#
+# from src.course_scheduler import State
+#
 
-from ..course_scheduler import State
+# @pytest.mark.parametrize()
+# def test_courses_state_init():  # TO BE UPDATED
+#     """
+#     [Comment to follow]
+#     """
 
-
-@pytest.mark.parametrize()
-def test_courses_state_init(): # TO BE UPDATED
-    """
-    [Comment to follow]
-    """
 
 # State:
 

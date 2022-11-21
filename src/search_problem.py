@@ -24,7 +24,7 @@ class FindCourses:
 
         Args:
             explore_course (ExploreCourse): database
-            units_requirement (Dict[str, int]): _description_
+            units_requirement (Dict[str, int]): applicable DEPARTMENT_REQUIREMENT dict from constants.py
             max_quarter (int): maximum quarter requirement
         """
         self.explore_course = explore_course

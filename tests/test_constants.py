@@ -1,13 +1,13 @@
-import pytest
-
-import test_constants.py
-
-
-@pytest.mark.parametrize()
-def test_constants(): # TO BE UPDATED
-    """
-    [Comment to follow]
-    """
+# import pytest
+#
+# import test_constants.py
+#
+#
+# # @pytest.mark.parametrize()
+# def test_constants():  # TO BE UPDATED
+#     """
+#     [Comment to follow]
+#     """
 
 
 # Dictionaries: check unchanged

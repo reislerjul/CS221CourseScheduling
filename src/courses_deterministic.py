@@ -28,6 +28,7 @@ class CoursesDeterministic:
         years=["2021-2022", "2022-2023"],
         departments=["CS", "EE", "CME"],
         output_dir="course_info",
+        read_file_loc="./data/cs_requirements.csv",
     ):
         """
         years: a list of possible academic year that the course is offered. Every year interval should be 1 year.
@@ -43,6 +44,7 @@ class CoursesDeterministic:
         self.output_dir = output_dir
         # self.all_courses is used for easier lookup between course number and course object
         self.all_courses = {}
+        self.read_file_loc = read_file_loc
 
     def run(self):
         """
@@ -115,7 +117,7 @@ class CoursesDeterministic:
         return self.course_to_class_database()
 
     def find_course_category(self, course_number: str) -> str:
-        requirement_file = pd.read_csv("./data/cs_requirements.csv")
+        requirement_file = pd.read_csv(self.read_file_loc)
         for _, course in requirement_file.iterrows():
             number = course[0].split()[1]
             category = course[0].split()[2]
