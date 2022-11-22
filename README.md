@@ -32,7 +32,7 @@ optional arguments:
 ## Running Course Scheduling
 Example usage:
 ```
-python schedule_courses.py -d course_data -p EE -y 2022-2023 2023-2024
+python schedule_courses.py -d data -p CS -y 2021-2022 2022-2023
 ```
 
 ## Setup
