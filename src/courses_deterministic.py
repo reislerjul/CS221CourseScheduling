@@ -28,6 +28,7 @@ class CoursesDeterministic:
         years=["2021-2022", "2022-2023"],
         departments=["CS", "EE", "CME"],
         output_dir="course_info",
+        read_file_loc="./data/cs_requirements.csv",
     ):
         """
         years: a list of possible academic year that the course is offered. Every year interval should be 1 year.
@@ -43,18 +44,19 @@ class CoursesDeterministic:
         self.output_dir = output_dir
         # self.all_courses is used for easier lookup between course number and course object
         self.all_courses = {}
-        # self.requirement_file loads all the requirements for cs_tracks
-        requirement_path = "./data/cs_requirements.csv"  # TODO later, change this to accommodate for all the deparments
 
-        if os.path.exists(requirement_path):
-            self.requirement_file = pd.read_csv(requirement_path)
+        self.read_file_loc = read_file_loc
+        # self.requirement_file loads all the requirements for cs_tracks
+        # requirement_path = "./data/cs_requirements.csv"  # TODO later, change this to accommodate for all the deparments
+
+        if os.path.exists(self.read_file_loc):
+            self.requirement_file = pd.read_csv(self.read_file_loc)
         else:
             raise FileNotFoundError("Missing department requirement file!")
 
     def run(self):
         """
         Currently only extracting courses from CS, EE and ICME department
-
         Check if course information file exists: if yes, extract from explorecourses api;
         extract from file otherwise. Output courses sorted by year and department in
         self.output_dir/{year}_{dept}.csv
@@ -95,6 +97,7 @@ class CoursesDeterministic:
                             "units_max": course.units_max,
                             "course_number": str(course.code),
                             "course_name": course.title,
+                            "course_subject": course.subject,
                         }
 
                         total_term = set()
@@ -166,6 +169,7 @@ class CoursesDeterministic:
                             (row["units_min"], row["units_max"]),
                             row["course_number"],
                             row["course_name"],
+                            row["course_subject"],
                             self.find_course_category(row["course_number"]),
                             tuple(set(terms)),
                         )
