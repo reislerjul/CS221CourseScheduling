@@ -1,0 +1,18 @@
+# Unit limit per quarter. You can ignore this for the first
+# few questions in problem 2.
+minUnits: 0
+maxUnits: 3
+
+# These are the quarters that I need to fill out.
+# It is assumed that the quarters are sorted in chronological order.
+register: "Aut2015"
+
+# Courses I've already taken
+taken: "CS106B"
+
+# Courses that I'm requesting
+request:
+  id: "CS246"
+  quarter: "Spr2016"
+  weight: 2
+  after:
