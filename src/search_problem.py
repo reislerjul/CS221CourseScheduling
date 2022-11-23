@@ -50,6 +50,11 @@ class FindCourses:
         Returns:
             Set[Course]: _description_
         """
+        # TODO: Filter out the quarter if internship = True
+        #
+        #
+        #
+
         # Offered in the next quarter
         courses_offered = self.explore_course.class_database[state.current_quarter + 1]
 
@@ -82,6 +87,10 @@ class FindCourses:
         ]
 
         # Combinations
+        # TODO: relax the number of courses available for each quarter
+        #
+        #
+        #
         combins = combinations(candidate_courses, 2)
         actions = []
 
@@ -116,9 +125,26 @@ class FindCourses:
         total_rewards = 0.0
 
         for course_and_unit in enrolled_courses:
+            # course_and_unit[0]: Course object
+            # course_and_unit[1]: unit count
             total_units += course_and_unit[1]
             total_rewards += course_and_unit[1] * course_and_unit[0].reward
+        print(course_and_unit[0].course_name)
 
+        # TODO: add soft requirement for previously taken courses
+        # Give higher reward for completed prerequisites
+        # Give lower reward for non-completed prerequisites
+        # Note: UCS cannot have cost below 0
+        #
+        #
+        #
+
+        # TODO: add time component for course cost
+        # Assign higher cost for courses larger than 300
+        # Provide 3 different Gaussian Distributions for possible time costs
+        #
+        #
+        #
         return total_units * MAX_CLASS_REWARD - total_rewards
 
     def start_state(self) -> State:
@@ -130,7 +156,6 @@ class FindCourses:
         Returns:
             State: _description_
         """
-        # raise Exception("Not Implemented yet")
         return State(0, [], self.units_requirement)
 
     def is_end(self, state: State) -> bool:
@@ -145,7 +170,10 @@ class FindCourses:
         Returns:
             bool: _description_
         """
-        # raise Exception("Not Implemented yet")
+        # TODO: include the case where a single class satisfies multiple requirements
+        #
+        #
+        #
         if sum(state.remaining_units.values()) <= 0:
             return True
         else:

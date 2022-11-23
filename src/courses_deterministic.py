@@ -98,6 +98,7 @@ class CoursesDeterministic:
                             "course_number": str(course.code),
                             "course_name": course.title,
                             "course_subject": course.subject,
+                            "instructor": "",
                         }
 
                         total_term = set()
@@ -108,6 +109,30 @@ class CoursesDeterministic:
                         # If the course isn't offered any of the terms, don't add it.
                         if not total_term:
                             continue
+
+                        # Extract primary instructor for the course
+                        for i in range(len(course.sections)):
+                            for j in range(len(course.sections[i].schedules)):
+                                for k in range(
+                                    len(course.sections[i].schedules[j].instructors)
+                                ):
+                                    if (
+                                        course.sections[i]
+                                        .schedules[j]
+                                        .instructors[k]
+                                        .is_primary_instructor
+                                    ):
+                                        single_course_object["instructor"] = (
+                                            course.sections[i]
+                                            .schedules[j]
+                                            .instructors[k]
+                                            .name
+                                        )
+                                        break
+                                if single_course_object["instructor"] != "":
+                                    break
+                            if single_course_object["instructor"] != "":
+                                break
 
                         single_course_object["quarters"] = list(total_term)
                         course_by_dept_list.append(single_course_object)
@@ -171,6 +196,7 @@ class CoursesDeterministic:
                             row["course_name"],
                             row["course_subject"],
                             self.find_course_category(row["course_number"]),
+                            row["instructor"],
                             tuple(set(terms)),
                         )
                     # Add same courses offered in the new year

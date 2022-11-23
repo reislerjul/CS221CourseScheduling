@@ -17,6 +17,16 @@ class State:
         self.course_taken = course_taken
         self.remaining_units = remaining_units
 
+        # TODO: Add waypoints for specific professors
+        #
+        #
+        #
+
+        # TODO: Add waypoints for terms to do research
+        #
+        #
+        #
+
     def print_state(self):
         print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
         print(f"** Quarter **: {self.current_quarter}")
