@@ -129,7 +129,6 @@ class FindCourses:
             # course_and_unit[1]: unit count
             total_units += course_and_unit[1]
             total_rewards += course_and_unit[1] * course_and_unit[0].reward
-        print(course_and_unit[0].course_name)
 
         # TODO: add soft requirement for previously taken courses
         # Give higher reward for completed prerequisites
