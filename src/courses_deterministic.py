@@ -28,6 +28,7 @@ class CoursesDeterministic:
         years=["2021-2022", "2022-2023"],
         departments=["CS", "EE", "CME"],
         output_dir="course_info",
+        read_file_loc="./data/cs_requirements.csv",
     ):
         """
         years: a list of possible academic year that the course is offered. Every year interval should be 1 year.
@@ -44,10 +45,18 @@ class CoursesDeterministic:
         # self.all_courses is used for easier lookup between course number and course object
         self.all_courses = {}
 
+        self.read_file_loc = read_file_loc
+        # self.requirement_file loads all the requirements for cs_tracks
+        # requirement_path = "./data/cs_requirements.csv"  # TODO later, change this to accommodate for all the deparments
+
+        if os.path.exists(self.read_file_loc):
+            self.requirement_file = pd.read_csv(self.read_file_loc)
+        else:
+            raise FileNotFoundError("Missing department requirement file!")
+
     def run(self):
         """
         Currently only extracting courses from CS, EE and ICME department
-
         Check if course information file exists: if yes, extract from explorecourses api;
         extract from file otherwise. Output courses sorted by year and department in
         self.output_dir/{year}_{dept}.csv
@@ -116,8 +125,7 @@ class CoursesDeterministic:
         return self.course_to_class_database()
 
     def find_course_category(self, course_number: str) -> str:
-        requirement_file = pd.read_csv("./data/cs_requirements.csv")
-        for _, course in requirement_file.iterrows():
+        for _, course in self.requirement_file.iterrows():
             number = course[0].split()[1]
             category = course[0].split()[2]
             if number == course_number:
