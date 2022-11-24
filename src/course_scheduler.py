@@ -11,11 +11,16 @@ class State:
     """
 
     def __init__(
-        self, current_quarter: int, course_taken: List, remaining_units: Dict[str, int]
+        self,
+        current_quarter: int,
+        course_taken: List,
+        remaining_units: Dict[str, int],
+        program_object,
     ) -> None:
         self.current_quarter = current_quarter
         self.course_taken = course_taken
         self.remaining_units = remaining_units
+        self.program_object = program_object
 
     def print_state(self):
         print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")

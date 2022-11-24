@@ -1,10 +1,10 @@
 import argparse
 from typing import List
 
-from src.courses_deterministic import CoursesDeterministic
 from src.constants import DEPARTMENT_REQUIREMENT, INDEX_QUARTER
-from src.search_problem import FindCourses, UniformCostSearch
+from src.courses_deterministic import CoursesDeterministic
 from src.course import ExploreCourse
+from src.search_problem import FindCourses, UniformCostSearch
 
 
 def main(

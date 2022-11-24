@@ -1,3 +1,4 @@
+import pandas as pd
 import pytest
 from typing import List, Set, Tuple
 
@@ -52,12 +53,23 @@ def program() -> CSAIProgram:
     """
     A pytest fixture returning a CSAIProgram object
     """
-    return CSAIProgram(CS_AI_PROGRAM_FILE)
+    df_requirements = pd.read_csv(CS_AI_PROGRAM_FILE)
+    return CSAIProgram(df_requirements)
+
+
+@pytest.fixture
+def requirements() -> CSAIProgram:
+    """
+    A pytest fixture returning a CSAIProgram object
+    """
+    return pd.read_csv(CS_AI_PROGRAM_FILE)
 
 
 @pytest.mark.parametrize("courses_to_waive", COURSES_TO_WAIVE)
 def test_waive_courses(
-    courses_to_waive: Tuple[List[Course], Set, bool], program: CSAIProgram
+    requirements: pd.DataFrame,
+    courses_to_waive: Tuple[List[Course], Set, bool],
+    program: CSAIProgram,
 ):
     """
     Check that waving foundation courses works and doesn't decrease the total requirement units left.
@@ -69,7 +81,7 @@ def test_waive_courses(
     """
     courses, foundations_left, foundation_done = courses_to_waive
     for course in courses:
-        program.waive_course(course)
+        program.waive_course(requirements, course)
 
     assert program.total_requirement_units_taken == 0
     assert program.foundations_areas_left == foundations_left
@@ -82,7 +94,9 @@ def test_waive_courses(
 
 
 @pytest.mark.parametrize("course_to_waive", COURSES_TO_WAIVE_EXCEPTION)
-def test_waive_courses_exception(course_to_waive: Course, program: CSAIProgram):
+def test_waive_courses_exception(
+    requirements: pd.DataFrame, course_to_waive: Course, program: CSAIProgram
+):
     """
     Check that an Exception is raised when trying to wave non-foundation requirements.
 
@@ -91,10 +105,12 @@ def test_waive_courses_exception(course_to_waive: Course, program: CSAIProgram):
     program: a newly initialized CSAIProgram
     """
     with pytest.raises(Exception):
-        program.waive_course(course_to_waive)
+        program.waive_course(requirements, course_to_waive)
 
 
-def test_take_single_foundation_course(program: CSAIProgram):
+def test_take_single_foundation_course(
+    requirements: pd.DataFrame, program: CSAIProgram
+):
     """
     Test that values are set correctly after taking a single foundation course.
 
@@ -103,7 +119,7 @@ def test_take_single_foundation_course(program: CSAIProgram):
     """
     course = Course(0, (3, 5), "103", "AI", "CS", "foundation", (1,))
     units = 5
-    program.take_course((course, units))
+    program.take_course(requirements, (course, units))
 
     assert program.total_requirement_units_taken == units
     assert program.foundations_areas_left == {
@@ -121,7 +137,7 @@ def test_take_single_foundation_course(program: CSAIProgram):
     assert not program.significant_implementation_satisfied
 
 
-def test_satisfy_foundation(program: CSAIProgram):
+def test_satisfy_foundation(requirements: pd.DataFrame, program: CSAIProgram):
     """
     Test that values are set correctly after taking enough foundation courses to satisfy foundation requirement.
 
@@ -137,7 +153,7 @@ def test_satisfy_foundation(program: CSAIProgram):
     ]
 
     for course in courses:
-        program.take_course((course, 3))
+        program.take_course(requirements, (course, 3))
 
     assert program.total_requirement_units_taken == 10
     assert program.foundations_areas_left == set()
@@ -150,7 +166,9 @@ def test_satisfy_foundation(program: CSAIProgram):
     assert not program.significant_implementation_satisfied
 
 
-def test_take_significant_implementation_course(program: CSAIProgram):
+def test_take_significant_implementation_course(
+    requirements: pd.DataFrame, program: CSAIProgram
+):
     """
     Test that values are set correctly after taking a significant implementation course.
 
@@ -158,7 +176,7 @@ def test_take_significant_implementation_course(program: CSAIProgram):
     program: a newly initialized CSAIProgram
     """
     course = Course(0, (3, 5), "151", "AI", "CS", "significant implementation", (1,))
-    program.take_course((course, 3))
+    program.take_course(requirements, (course, 3))
 
     assert program.total_requirement_units_taken == 3
     assert len(program.foundations_areas_left) == 5
@@ -171,7 +189,7 @@ def test_take_significant_implementation_course(program: CSAIProgram):
     assert program.significant_implementation_satisfied
 
 
-def test_take_breadth_course(program: CSAIProgram):
+def test_take_breadth_course(requirements: pd.DataFrame, program: CSAIProgram):
     """
     Test that values are set correctly after taking a breadth course.
 
@@ -179,7 +197,7 @@ def test_take_breadth_course(program: CSAIProgram):
     program: a newly initialized CSAIProgram
     """
     course = Course(0, (3, 5), "166", "AI", "COMM", "breadth", (1,))
-    program.take_course((course, 3))
+    program.take_course(requirements, (course, 3))
 
     assert program.total_requirement_units_taken == 3
     assert len(program.foundations_areas_left) == 5
@@ -192,7 +210,7 @@ def test_take_breadth_course(program: CSAIProgram):
     assert not program.significant_implementation_satisfied
 
 
-def test_satisfy_breadth(program: CSAIProgram):
+def test_satisfy_breadth(requirements: pd.DataFrame, program: CSAIProgram):
     """
     Test that values are set correctly after taking enough breadth courses to satisfy the requirement.
 
@@ -206,7 +224,7 @@ def test_satisfy_breadth(program: CSAIProgram):
     ]
 
     for course in courses:
-        program.take_course((course, 4))
+        program.take_course(requirements, (course, 4))
 
     assert program.total_requirement_units_taken == 12
     assert len(program.foundations_areas_left) == 5
@@ -220,7 +238,9 @@ def test_satisfy_breadth(program: CSAIProgram):
 
 
 @pytest.mark.parametrize("depth_course", DEPTH_COURSES)
-def test_take_depth_course(depth_course: Tuple[Course, int], program: CSAIProgram):
+def test_take_depth_course(
+    requirements: pd.DataFrame, depth_course: Tuple[Course, int], program: CSAIProgram
+):
     """
     Test that values are set correctly after taking a depth course.
 
@@ -229,7 +249,7 @@ def test_take_depth_course(depth_course: Tuple[Course, int], program: CSAIProgra
     program: a newly initialized CSAIProgram
     """
     course, b = depth_course
-    program.take_course((course, 4))
+    program.take_course(requirements, (course, 4))
 
     assert program.total_requirement_units_taken == 4
     assert len(program.foundations_areas_left) == 5
@@ -244,7 +264,7 @@ def test_take_depth_course(depth_course: Tuple[Course, int], program: CSAIProgra
     assert not program.significant_implementation_satisfied
 
 
-def test_satisfy_depth(program: CSAIProgram):
+def test_satisfy_depth(requirements: pd.DataFrame, program: CSAIProgram):
     """
     Test that values are set correctly after satisfying depth requirements.
 
@@ -260,7 +280,7 @@ def test_satisfy_depth(program: CSAIProgram):
         Course(0, (3, 5), "205", "AI", "ENGR", "breadth", (1,)),
     ]
     for course in courses:
-        program.take_course((course, 4))
+        program.take_course(requirements, (course, 4))
 
     assert program.total_requirement_units_taken == 24
     assert len(program.foundations_areas_left) == 5
@@ -276,7 +296,7 @@ def test_satisfy_depth(program: CSAIProgram):
     assert program.significant_implementation_satisfied
 
 
-def test_satisfy_degree_no_waivers(program: CSAIProgram):
+def test_satisfy_degree_no_waivers(requirements: pd.DataFrame, program: CSAIProgram):
     """
     Test that values are set correctly after satisfying the degree program with no waivers.
 
@@ -300,7 +320,7 @@ def test_satisfy_degree_no_waivers(program: CSAIProgram):
         Course(0, (3, 5), "180", "AI", "EE", "breadth", (1,)),
     ]
     for course in courses:
-        program.take_course((course, 4))
+        program.take_course(requirements, (course, 4))
 
     assert program.total_requirement_units_taken == 46
     assert len(program.foundations_areas_left) == 0
@@ -315,7 +335,7 @@ def test_satisfy_degree_no_waivers(program: CSAIProgram):
     assert program.significant_implementation_satisfied
 
 
-def test_satisfy_degree_three_waivers(program: CSAIProgram):
+def test_satisfy_degree_three_waivers(requirements: pd.DataFrame, program: CSAIProgram):
     """
     Test that values are set correctly after satisfying the degree program with 3 waivers.
 
@@ -328,7 +348,7 @@ def test_satisfy_degree_three_waivers(program: CSAIProgram):
         Course(0, (3, 5), "161", "AI", "CS", "foundation", (1,)),
     ]
     for course in waived_courses:
-        program.waive_course(course)
+        program.waive_course(requirements, course)
 
     courses_taken = [
         Course(0, (3, 5), "107", "AI", "CS", "foundation", (1,)),
@@ -346,10 +366,10 @@ def test_satisfy_degree_three_waivers(program: CSAIProgram):
     seminars_taken = [Course(0, (1, 2), "300", "AI", "CS", "seminar", (1,))]
 
     for course in courses_taken:
-        program.take_course((course, 4))
+        program.take_course(requirements, (course, 4))
 
     for seminar in seminars_taken:
-        program.take_course((seminar, 1))
+        program.take_course(requirements, (seminar, 1))
 
     assert program.total_requirement_units_taken == 45
     assert len(program.foundations_areas_left) == 0
