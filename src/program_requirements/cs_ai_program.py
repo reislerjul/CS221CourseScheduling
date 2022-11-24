@@ -1,21 +1,23 @@
 import pandas as pd
-from typing import List, Tuple
+from typing import List, Set, Tuple
 
 from ..course import Course
 from .degree_program import DegreeProgram, TOTAL_UNITS_REQUIRED
 
 
 class CSAIProgram(DegreeProgram):
-    def __init__(self, df_requirements):
+    def __init__(self, df_requirements: pd.DataFrame, verbose: int = 0):
         """
         Program requirements are based on https://cs.stanford.edu/degrees/mscs/programsheets/psguide2223.pdf
 
         Arguments:
         df_requirements - DataFrame for degree program
         """
+        self.verbose = verbose
+
         self.total_requirement_units_taken = 0
         self.seminar_units_taken = 0
-        self.courses_taken = set()
+        self.courses_taken: Set[str] = set()
 
         # Foundations
         foundations = df_requirements[df_requirements["Category"] == "foundation"]
@@ -142,9 +144,10 @@ class CSAIProgram(DegreeProgram):
         )
 
         if not requirements_satisfied:
-            print(
-                f"WARNING: taking {full_course_code} but it doesn't satisfy any requirements..."
-            )
+            if self.verbose > 0:
+                print(
+                    f"WARNING: taking {full_course_code} but it doesn't satisfy any requirements..."
+                )
             self.courses_taken.add(full_course_code)
             return
 

@@ -24,6 +24,7 @@ class FindCourses:
         units_requirement: Dict[str, int],
         max_quarter: int,
         max_successors: int,
+        verbose: int = 0,
     ) -> None:
         """_summary_
 
@@ -43,7 +44,7 @@ class FindCourses:
                 f"Cannot find path to program requirements! {CS_AI_PROGRAM_FILE} does not exist."
             )
         self.df_requirements = pd.read_csv(CS_AI_PROGRAM_FILE)
-        self.program_object_initial = CSAIProgram(self.df_requirements)
+        self.program_object_initial = CSAIProgram(self.df_requirements, verbose)
 
         # For now, wave the foundation courses
         foundations = {"CS 103", "CS 109", "CS 161", "CS 107", "CS 110"}
@@ -92,6 +93,7 @@ class FindCourses:
             for course in candidate_courses
             if course.units[0] >= 3 and course.units[1] <= 5
         ]
+
         candidate_courses = [
             course
             for course in candidate_courses
@@ -106,7 +108,7 @@ class FindCourses:
             if not state.program_object.requirements_satisfied_by_course(
                 self.df_requirements, course1
             ):
-                break
+                continue
 
             for course2 in candidate_courses:
                 if course1 == course2:
@@ -116,7 +118,7 @@ class FindCourses:
                 if not state.program_object.requirements_satisfied_by_course(
                     self.df_requirements, course2
                 ):
-                    break
+                    continue
 
                 new_program_object = copy.deepcopy(state.program_object)
 

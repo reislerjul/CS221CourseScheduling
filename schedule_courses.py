@@ -43,6 +43,7 @@ def main(
         department_requirement,
         max_quarter=max_quarter,
         max_successors=max_successors,
+        verbose=verbose,
     )
     ucs = UniformCostSearch(verbose=verbose)
 
