@@ -1,0 +1,228 @@
+,units_min,units_max,course_number,course_name,course_subject,instructor,quarters
+0,1,1,1U,Practical Unix,CS,,"['Autumn', 'Winter']"
+1,1,1,7,Personal Finance for Engineers,CS,"Nash, A.",['Autumn']
+2,1,1,9,Problem-Solving for the CS Technical Interview,CS,"Tullis, I.","['Spring', 'Autumn']"
+3,2,2,11SI,How to Make VR: Introduction to Virtual Reality Design and Development,CS,"Borenstein, J.",['Spring']
+4,1,1,12SI,Introduction to Mobile Augmented Reality Design and Development,CS,"Borenstein, J.",['Autumn']
+5,2,2,21SI,AI for Social Good,CS,"Piech, C.",['Spring']
+6,1,1,22A,The Social & Economic Impact of Artificial Intelligence (INTLPOL 200),CS,"Kaplan, J.",['Winter']
+7,4,4,24,"Minds and Machines (LINGUIST 35, PHIL 99, PSYCH 35, SYMSYS 1, SYMSYS 200)",CS,"Srirangarajan, T.","['Autumn', 'Winter']"
+8,1,1,25,Transformers United,CS,"Manning, C.",['Autumn']
+9,2,2,41,Hap.py Code: The Python Programming Language,CS,"Cain, J.",['Spring']
+10,3,3,44N,Great Ideas in Graphics,CS,"James, D.",['Autumn']
+11,3,3,46N,Data-Driven Decisions and Discovery,CS,"Widom, J.",['Spring']
+12,2,2,47,Cross-Platform Mobile Development,CS,"Landay, J.","['Spring', 'Winter']"
+13,3,3,49N,Using Bits to Control Atoms,CS,"Engler, D.",['Autumn']
+14,2,2,51,CS + Social Good Studio: Designing Social Impact Projects,CS,"Cain, J.",['Winter']
+15,2,2,52,CS + Social Good Studio: Implementing Social Good Projects,CS,"Cain, J.",['Spring']
+16,3,3,56N,Great Discoveries and Inventions in Computing,CS,"Hennessy, J.",['Winter']
+17,3,3,57N,Randomness: Computational and Philosophical Approaches (PHIL 3N),CS,"Icard, T.",['Winter']
+18,2,2,59SI,Quantum Computing: Open-Source Project Experience,CS,"Bouland, A.",['Spring']
+19,3,3,80Q,Race and Gender in Silicon Valley (AFRICAAM 80Q),CS,"Lee, C.",['Autumn']
+20,3,3,83,Playback Theater,CS,"Reingold, O.",['Winter']
+21,2,2,91SI,Digital Canvas: An Introduction to UI/UX Design,CS,"Cain, J.",['Spring']
+22,1,1,100A,Problem-solving Lab for CS106A,CS,"Parlante, N.","['Spring', 'Autumn', 'Winter']"
+23,1,1,100B,Problem-solving Lab for CS106B,CS,"Schwarz, K.","['Spring', 'Autumn', 'Winter']"
+24,3,5,103,Mathematical Foundations of Computing,CS,"Schwarz, K.","['Summer', 'Spring', 'Autumn', 'Winter']"
+25,1,1,103A,Mathematical Problem-solving Strategies,CS,"Lee, C.","['Spring', 'Winter']"
+26,3,5,105,Introduction to Computers,CS,"Young, P.","['Spring', 'Autumn']"
+27,3,5,106A,Programming Methodology,CS,"Parlante, N.","['Spring', 'Autumn', 'Winter', 'Summer']"
+28,3,5,106B,Programming Abstractions,CS,"Zelenski, J.","['Summer', 'Spring', 'Autumn', 'Winter']"
+29,3,3,106E,Exploration of Computing,CS,"Young, P.",['Spring']
+30,1,1,106L,Standard C++ Programming Laboratory,CS,"Schwarz, K.","['Spring', 'Autumn', 'Winter']"
+31,1,1,106M,Enrichment Adventures in Programming Abstractions,CS,"Zelenski, J.",['Autumn']
+32,1,1,106S,Coding for Social Good,CS,"Cain, J.","['Spring', 'Autumn', 'Winter']"
+33,3,5,107,Computer Organization and Systems,CS,"Troccoli, N.","['Spring', 'Autumn', 'Winter']"
+34,1,1,107A,Problem-solving Lab for CS107,CS,"Troccoli, N.","['Spring', 'Autumn', 'Winter']"
+35,3,5,107E,Computer Systems from the Ground Up,CS,"Levis, P.","['Spring', 'Autumn', 'Winter']"
+36,3,4,108,Object-Oriented Systems Design,CS,"Young, P.",['Winter']
+37,3,5,109,Introduction to Probability for Computer Scientists,CS,"Cain, J.","['Summer', 'Spring', 'Autumn', 'Winter']"
+38,1,1,109A,Problem-solving Lab for CS109,CS,"Piech, C.","['Spring', 'Autumn', 'Winter']"
+39,3,5,110,Principles of Computer Systems,CS,"Cain, J.","['Autumn', 'Winter']"
+40,1,1,110A,Problem Solving Lab for CS110,CS,"Cain, J.","['Autumn', 'Winter']"
+41,2,2,110L,Safety in Systems Programming,CS,"Rossman, T.","['Autumn', 'Winter']"
+42,3,5,111,Operating Systems Principles,CS,"Cain, J.",['Spring']
+43,1,1,111A,Problem Solving Lab for CS111,CS,"Cain, J.",['Spring']
+44,3,3,112,Operating systems kernel implementation project,CS,"Mazieres, D.",['Winter']
+45,3,3,114,Selected Reading of Computer Science Research,CS,"Levis, P.",['Spring']
+46,3,4,124,"From Languages to Information (LINGUIST 180, LINGUIST 280)",CS,"Jurafsky, D.",['Autumn']
+47,3,4,129,Applied Machine Learning,CS,"Ng, A.",['Spring']
+48,3,4,131,Computer Vision: Foundations and Applications,CS,"Niebles Duque, J.",['Autumn']
+49,3,5,140,Operating Systems and Systems Programming,CS,"Mazieres, D.",['Winter']
+50,3,4,140E,Operating systems design and implementation,CS,"Engler, D.",['Winter']
+51,3,3,142,Web Applications,CS,"Rosenblum, M.","['Spring', 'Winter']"
+52,3,4,143,Compilers,CS,"Kjoelstad, F.",['Spring']
+53,3,4,144,Introduction to Computer Networking,CS,"Winstein, K.",['Autumn']
+54,3,4,145,Data Management and Data Systems,CS,"Shivakumar, N.",['Autumn']
+55,3,5,147,Introduction to Human-Computer Interaction Design,CS,"Landay, J.",['Winter']
+56,3,4,148,Introduction to Computer Graphics and Imaging,CS,"Fedkiw, R.","['Summer', 'Autumn']"
+57,3,4,149,Parallel Computing,CS,"Fatahalian, K.",['Autumn']
+58,3,3,151,Logic Programming,CS,"Genesereth, M.",['Spring']
+59,3,3,152,Trust and Safety Engineering,CS,"Stamos, A.",['Winter']
+60,3,4,154,Introduction to the Theory of Computation,CS,"Reingold, O.",['Autumn']
+61,3,3,155,Computer and Network Security,CS,"Boneh, D.",['Spring']
+62,3,3,157,Computational Logic,CS,"Genesereth, M.",['Autumn']
+63,3,5,161,Design and Analysis of Algorithms,CS,"Rubinstein, A.","['Summer', 'Autumn', 'Winter']"
+64,1,1,161A,Problem-Solving Lab for CS161,CS,"Rubinstein, A.","['Autumn', 'Winter']"
+65,3,3,163,The Practice of Theory Research,CS,"Reingold, O.",['Winter']
+66,3,4,166,Data Structures,CS,"Schwarz, K.",['Spring']
+67,3,4,168,The Modern Algorithmic Toolbox,CS,"Valiant, G.",['Spring']
+68,1,5,170,"Stanford Laptop Orchestra: Composition, Coding, and Performance (MUSIC 128)",CS,"Wang, G.",['Spring']
+69,5,5,182,"Ethics, Public Policy, and Technological Change (COMM 180, ETHICSOC 182, PHIL 82, POLISCI 182, PUBLPOL 182)",CS,"Sahami, M.",['Winter']
+70,5,5,182W,"Ethics, Public Policy, and Technological Change (WIM)",CS,"Sahami, M.",['Winter']
+71,1,1,183E,Effective Leadership in High-Tech,CS,"Finley, M.",['Autumn']
+72,3,4,184,Bridging Policy and Tech Through Design (PUBLPOL 170),CS,"Goel, A.","['Spring', 'Autumn']"
+73,3,4,190,Software Design Studio,CS,"Ousterhout, J.",['Winter']
+74,1,6,191,Senior Project,CS,"Olukotun, O.","['Summer', 'Spring', 'Autumn', 'Winter']"
+75,3,6,191W,Writing Intensive Senior Research Project,CS,"Zou, J.","['Spring', 'Autumn', 'Winter']"
+76,1,4,192,Programming Service Project,CS,"Kozyrakis, C.","['Summer', 'Spring', 'Autumn', 'Winter']"
+77,3,3,193C,Client-Side Internet Technologies,CS,"Young, P.",['Summer']
+78,1,1,193Q,Introduction to Python Programming,CS,"Parlante, N.",['Autumn']
+79,3,3,193X,Web Programming Fundamentals,CS,"Chang, M.",['Winter']
+80,3,3,194,Software Project,CS,"Borenstein, J.","['Spring', 'Winter']"
+81,1,1,194A,Android Programming Workshop,CS,"Borenstein, J.",['Autumn']
+82,3,4,194H,User Interface Design Project,CS,"Landay, J.",['Spring']
+83,3,3,194W,Software Project (WIM),CS,"Borenstein, J.","['Spring', 'Winter']"
+84,3,4,195,Supervised Undergraduate Research,CS,"Valiant, G.","['Summer', 'Spring', 'Autumn', 'Winter']"
+85,3,4,197,Computer Science Research,CS,"Tamkin, A.","['Spring', 'Autumn']"
+86,3,4,198,Teaching Computer Science,CS,"Sahami, M.","['Spring', 'Autumn', 'Winter']"
+87,1,1,198B,Additional Topics in Teaching Computer Science,CS,"Sahami, M.","['Spring', 'Autumn', 'Winter']"
+88,1,6,199,Independent Work,CS,"Cheriton, D.","['Summer', 'Spring', 'Autumn', 'Winter']"
+89,1,6,199P,Independent Work,CS,"Levitt, M.","['Summer', 'Spring', 'Autumn', 'Winter']"
+90,1,1,202,Law for Computer Science Professionals,CS,"Hansen, D.","['Spring', 'Autumn']"
+91,2,3,204,Computational Law,CS,,['Spring']
+92,3,3,205L,Continuous Mathematical Methods with an Emphasis on Machine Learning,CS,"Fedkiw, R.",['Winter']
+93,3,3,206,Exploring Computational Journalism (COMM 281),CS,"Agrawala, M.",['Winter']
+94,3,3,208E,Great Ideas in Computer Science,CS,"Gregg, C.",['Autumn']
+95,3,4,210A,Software Project Experience with Corporate Partners,CS,"Borenstein, J.",['Winter']
+96,3,4,210B,Software Project Experience with Corporate Partners,CS,"Borenstein, J.",['Spring']
+97,3,5,212,Operating Systems and Systems Programming,CS,"Mazieres, D.",['Winter']
+98,3,3,214,Selected Reading of Computer Science Research,CS,"Levis, P.",['Spring']
+99,3,4,221,Artificial Intelligence: Principles and Techniques,CS,"Hashimoto, T.","['Spring', 'Autumn']"
+100,3,3,223A,Introduction to Robotics (ME 320),CS,"Ganguly, S.",['Winter']
+101,3,4,224N,"Natural Language Processing with Deep Learning (LINGUIST 284, SYMSYS 195N)",CS,"Manning, C.",['Winter']
+102,2,4,224S,Spoken Language Processing (LINGUIST 285),CS,"Maas, A.",['Spring']
+103,3,4,224U,"Natural Language Understanding (LINGUIST 188, LINGUIST 288, SYMSYS 195U)",CS,"Potts, C.",['Spring']
+104,3,4,224V,Conversational Virtual Assistants with Deep Learning,CS,"Lam, M.",['Autumn']
+105,3,4,224W,Machine Learning with Graphs,CS,"Leskovec, J.",['Autumn']
+106,3,3,225A,Experimental Robotics,CS,"Khatib, O.",['Spring']
+107,3,3,227B,General Game Playing,CS,"Genesereth, M.",['Spring']
+108,3,4,228,Probabilistic Graphical Models: Principles and Techniques,CS,"Ermon, S.",['Winter']
+109,3,4,229,Machine Learning (STATS 229),CS,"Charikar, M.","['Spring', 'Autumn', 'Summer']"
+110,3,3,229M,Machine Learning Theory (STATS 214),CS,"Ma, T.",['Autumn']
+111,3,4,230,Deep Learning,CS,"Ng, A.","['Spring', 'Autumn']"
+112,3,4,231A,Computer Vision: From 3D Reconstruction to Recognition,CS,"Savarese, S.",['Winter']
+113,3,4,231N,Deep Learning for Computer Vision,CS,"Li, F.",['Spring']
+114,3,3,233,Geometric and Topological Data Analysis (CME 251),CS,"Guibas, L.",['Spring']
+115,3,3,234,Reinforcement Learning,CS,"Brunskill, E.",['Winter']
+116,3,4,235,"Computational Methods for Biomedical Image Analysis and Interpretation (BIOMEDIN 260, RAD 260)",CS,"Rubin, D.",['Spring']
+117,3,3,236,Deep Generative Models,CS,"Ermon, S.",['Autumn']
+118,3,3,236G,Generative Adversarial Networks,CS,"Zhou, S.",['Winter']
+119,3,4,237A,"Principles of Robot Autonomy I (AA 174A, AA 274A, EE 160A, EE 260A)",CS,"Schmerling, E.",['Autumn']
+120,3,4,237B,"Principles of Robot Autonomy II (AA 174B, AA 274B, EE 260B)",CS,"Sadigh, D.",['Winter']
+121,3,4,238,Decision Making under Uncertainty (AA 228),CS,"Kochenderfer, M.",['Autumn']
+122,3,4,239,Advanced Topics in Sequential Decision Making (AA 229),CS,"Kochenderfer, M.",['Winter']
+123,3,3,240,Advanced Topics in Operating Systems,CS,"Engler, D.",['Spring']
+124,3,3,240LX,"Advanced Systems Laboratory, Accelerated",CS,"Engler, D.",['Spring']
+125,3,3,241,Embedded Systems Workshop (EE 285),CS,"Levis, P.","['Spring', 'Autumn']"
+126,3,4,242,Programming Languages,CS,"Aiken, A.",['Autumn']
+127,3,4,243,Program Analysis and Optimizations,CS,"Maydan, D.",['Spring']
+128,3,4,244,Advanced Topics in Networking,CS,"Kim, C.",['Spring']
+129,3,3,244B,Distributed Systems,CS,"Mazieres, D.",['Spring']
+130,3,4,245,Principles of Data-Intensive Systems,CS,"Zaharia, M.",['Winter']
+131,3,4,246,Mining Massive Data Sets,CS,"Leskovec, J.",['Winter']
+132,3,4,247A,Design for Artificial Intelligence (SYMSYS 195A),CS,"Stanford, J.",['Spring']
+133,3,4,247B,Design for Behavior Change (SYMSYS 195B),CS,"Wodtke, C.",['Winter']
+134,3,4,247G,Design for Play (SYMSYS 195G),CS,"Wodtke, C.",['Spring']
+135,3,4,247I,Design for Understanding,CS,"Wodtke, C.",['Autumn']
+136,3,4,247S,Service Design (SYMSYS 195S),CS,"Stanford, J.",['Winter']
+137,3,4,248,Interactive Computer Graphics,CS,"Fatahalian, K.",['Winter']
+138,3,3,249I,The Modern Internet,CS,"Durumeric, Z.",['Autumn']
+139,3,3,250,Algebraic Error Correcting Codes (EE 387),CS,"Wootters, M.",['Winter']
+140,3,3,251,Cryptocurrencies and blockchain technologies,CS,"Boneh, D.",['Autumn']
+141,3,3,253,Web Security,CS,"Aboukhadijeh, F.",['Autumn']
+142,3,3,254,Computational Complexity,CS,"Tan, L.",['Winter']
+143,3,3,254B,Computational Complexity II,CS,"Tan, L.",['Spring']
+144,3,3,255,Introduction to Cryptography,CS,"Boneh, D.",['Winter']
+145,3,3,259Q,Quantum Computing,CS,"Bouland, A.",['Winter']
+146,3,3,261,Optimization and Algorithmic Paradigms,CS,"Goel, A.",['Spring']
+147,3,3,265,Randomized Algorithms and Probabilistic Analysis (CME 309),CS,"Valiant, G.",['Winter']
+148,3,3,270,Modeling Biomedical Systems (BIOMEDIN 210),CS,"Musen, M.","['Spring', 'Winter']"
+149,3,4,271,"Artificial Intelligence in Healthcare (BIODS 220, BIOMEDIN 220)",CS,"Yeung, S.",['Autumn']
+150,3,5,272,"Introduction to Biomedical Informatics Research Methodology (BIOE 212, BIOMEDIN 212, GENE 212)",CS,"Altman, R.","['Spring', 'Winter']"
+151,3,3,273C,"Cloud Computing for Biology and Healthcare (BIOMEDIN 222, GENE 222)",CS,"Snyder, M.",['Spring']
+152,3,4,274,"Representations and Algorithms for Computational Molecular Biology (BIOE 214, BIOMEDIN 214, GENE 214)",CS,"Altman, R.",['Autumn']
+153,3,4,275,"Translational Bioinformatics (BIOE 217, BIOMEDIN 217, GENE 217)",CS,"Wall, D.",['Winter']
+154,2,4,275A,Symbolic Musical Information (MUSIC 253),CS,"Sapp, C.",['Winter']
+155,2,4,275B,Computational Music Analysis (MUSIC 254),CS,"Sapp, C.",['Spring']
+156,3,4,278,"Social Computing (SOC 174, SOC 274)",CS,"Wodtke, C.",['Spring']
+157,3,3,279,"Computational Biology: Structure and Organization of Biomolecules and Cells (BIOE 279, BIOMEDIN 279, BIOPHYS 279, CME 279)",CS,"Dror, R.",['Autumn']
+158,3,4,281,Ethics of Artificial Intelligence,CS,"Guestrin, C.",['Spring']
+159,3,3,295,Software Engineering,CS,"Achour, S.",['Winter']
+160,1,1,298,Seminar on Teaching Introductory Computer Science (EDUC 298),CS,"Gregg, C.",['Spring']
+161,1,1,300,Departmental Lecture Series,CS,"Reingold, O.",['Autumn']
+162,3,3,320,Value of Data and AI,CS,"Eglash, S.",['Winter']
+163,3,3,322,"Triangulating Intelligence: Melding Neuroscience, Psychology, and AI (PSYCH 225)",CS,"Yamins, D.",['Winter']
+164,3,3,324,Understanding and Developing Large Language Models,CS,"Re, C.",['Winter']
+165,3,5,325B,"Data for Sustainable Development (EARTHSYS 162, EARTHSYS 262)",CS,"Burke, M.",['Autumn']
+166,3,4,326,Topics in Advanced Robotic Manipulation,CS,"Bohg, J.",['Autumn']
+167,3,3,329D,Machine Learning Under Distributional Shifts,CS,"Hashimoto, T.",['Autumn']
+168,3,3,329E,Machine Learning on Embedded Systems (EE 292D),CS,"Katti, S.",['Autumn']
+169,3,4,329P,Practical Machine Learning,CS,"Huang, Q.",['Autumn']
+170,3,4,329S,Machine Learning Systems Design,CS,"Nguyen, H.",['Winter']
+171,3,3,329T,Trustworthy Machine Learning,CS,"Mitchell, J.",['Spring']
+172,3,3,330,Deep Multi-task and Meta Learning,CS,"Finn, C.",['Autumn']
+173,3,4,333,Algorithms for Interactive Robotics,CS,"Sadigh, D.",['Winter']
+174,1,4,337,AI-Assisted Care (MED 277),CS,"Li, F.",['Autumn']
+175,3,3,342,Building for Digital Health (MED 253),CS,"Aalami, O.",['Winter']
+176,3,3,343D,Domain-Specific Programming Models and Compilers,CS,"Kjoelstad, F.",['Autumn']
+177,3,4,347,Human-Computer Interaction: Foundations and Frontiers,CS,"Agrawala, M.",['Spring']
+178,3,4,348B,Computer Graphics: Image Synthesis Techniques,CS,"Fatahalian, K.",['Spring']
+179,3,3,348C,Computer Graphics: Animation and Simulation,CS,"James, D.",['Winter']
+180,3,3,348E,"Character Animation: Modeling, Simulation, and Control of Human Motion",CS,"Liu, K.",['Spring']
+181,3,4,348I,Computer Graphics in the Era of AI,CS,"Wu, J.",['Autumn']
+182,3,4,348K,Visual Computing Systems,CS,"Fatahalian, K.",['Spring']
+183,3,3,348N,Neural Models for 3D Geometry,CS,"Guibas, L.",['Winter']
+184,3,3,349D,Cloud Computing Technology,CS,"Kozyrakis, C.",['Autumn']
+185,3,3,349H,Software Techniques for Emergent Hardware Platforms (EE 292Y),CS,"Achour, S.",['Autumn']
+186,3,4,349M,Machine Learning for Software Engineering,CS,,['Spring']
+187,3,3,354,Topics in Intractability: Unfulfilled Algorithmic Fantasies,CS,"Rubinstein, A.",['Winter']
+188,3,3,355,Advanced Topics in Cryptography,CS,"Ozdemir, A.",['Spring']
+189,3,3,356,Topics in Computer and Network Security,CS,"Durumeric, Z.",['Winter']
+190,3,3,357S,Formal Methods for Computer Systems,CS,"Trippel, C.",['Autumn']
+191,3,5,360,Simplicity and Complexity in Economic Theory (ECON 284),CS,"Milgrom, P.",['Spring']
+192,3,4,361,Engineering Design Optimization (AA 222),CS,"Kochenderfer, M.",['Spring']
+193,3,3,366,Computational Social Choice (MS&E 336),CS,"Goel, A.",['Autumn']
+194,3,3,368,Algorithmic Techniques for Big Data,CS,"Charikar, M.",['Spring']
+195,3,3,369Z,Dynamic Data Structures for Graphs,CS,"Charikar, M.",['Autumn']
+196,3,3,371,"Computational Biology in Four Dimensions (BIOMEDIN 371, BIOPHYS 371, CME 371)",CS,,['Winter']
+197,3,3,372,Artificial Intelligence for Disease Diagnosis and Information Recommendations,CS,"Chang, E.",['Spring']
+198,3,4,377G,Designing Serious Games,CS,,['Winter']
+199,3,4,377Q,Designing for Accessibility (ME 214),CS,"Tang, J.",['Spring']
+200,3,4,377U,Understanding Users,CS,"Bentley, F.",['Spring']
+201,1,1,390A,Curricular Practical Training,CS,"Bejerano, G.","['Summer', 'Spring', 'Autumn', 'Winter']"
+202,1,1,390B,Curricular Practical Training,CS,"Bejerano, G.","['Summer', 'Spring', 'Autumn', 'Winter']"
+203,1,1,390C,Curricular Practical Training,CS,"Bejerano, G.","['Summer', 'Spring', 'Autumn', 'Winter']"
+204,1,1,390D,Part-time Curricular Practical Training,CS,"Kundaje, A.","['Summer', 'Spring', 'Autumn', 'Winter']"
+205,1,9,393,Computer Laboratory,CS,,['Autumn']
+206,1,6,395,Independent Database Project,CS,"Roughgarden, T.",['Autumn']
+207,4,4,398,Computational Education,CS,,['Spring']
+208,1,9,399,Independent Project,CS,"Yamins, D.","['Summer', 'Spring', 'Autumn', 'Winter']"
+209,1,9,399P,Independent Project,CS,"Ullman, J.","['Summer', 'Spring', 'Autumn', 'Winter']"
+210,3,3,422,Interactive and Embodied Learning (EDUC 234A),CS,"Li, F.",['Winter']
+211,3,3,428B,"Probabilistic Models of Cognition: Language (LINGUIST 238B, PSYCH 220B)",CS,"Goodman, N.",['Autumn']
+212,3,3,432,Computer Vision for Education and Social Science Research (EDUC 463),CS,"Haber, N.",['Winter']
+213,3,4,448B,Data Visualization (SYMSYS 195V),CS,"Agrawala, M.",['Autumn']
+214,3,3,448I,Computational Imaging (EE 367),CS,"Wetzstein, G.",['Winter']
+215,3,4,476A,"Music, Computing, Design: The Art of Design (MUSIC 256A)",CS,"Wang, G.",['Autumn']
+216,3,3,498C,Introduction to CSCL: Computer-Supported Collaborative Learning (EDUC 315A),CS,"Pea, R.",['Winter']
+217,1,15,499,Advanced Reading and Research,CS,"Fisher, K.","['Summer', 'Spring', 'Autumn', 'Winter']"
+218,1,15,499P,Advanced Reading and Research,CS,"Koller, D.","['Summer', 'Spring', 'Autumn', 'Winter']"
+219,1,1,520,Knowledge Graphs,CS,,['Spring']
+220,1,1,521,Seminar on AI Safety,CS,"Corso, A.",['Spring']
+221,1,1,522,Seminar in Artificial Intelligence in Healthcare,CS,"Dror, R.",['Autumn']
+222,1,2,523,Research Seminar in Computer Vision + X,CS,,['Spring']
+223,1,1,528,Machine Learning Systems Seminar,CS,"Re, C.","['Spring', 'Autumn', 'Winter']"
+224,1,1,529,Robotics and Autonomous Systems Seminar (AA 289),CS,"Pavone, M.","['Spring', 'Winter']"
+225,1,1,547,Human-Computer Interaction Seminar,CS,"Follmer, S.","['Spring', 'Autumn', 'Winter']"
+226,0,0,802,TGR Dissertation,CS,"Dally, B.","['Summer', 'Spring', 'Autumn', 'Winter']"
