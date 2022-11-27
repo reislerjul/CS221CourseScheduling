@@ -19,7 +19,6 @@ QUARTER_TO_INDEX = {
 class CoursesDeterministic:
     """
     A Courses Deterministic Class use explorecourse API to grab the courses from each department (CS, EE, and ICME).
-
     The data pulled in this class will be used to populate the Course and ExploreCourse class
     """
 
@@ -32,9 +31,7 @@ class CoursesDeterministic:
     ):
         """
         years: a list of possible academic year that the course is offered. Every year interval should be 1 year.
-
         departments: a list of departments that we want to extract for course planning.
-
         output_dir: the directory that saves the extracted course info
         """
         self.connect = CourseConnection()
@@ -98,6 +95,7 @@ class CoursesDeterministic:
                             "course_number": str(course.code),
                             "course_name": course.title,
                             "course_subject": course.subject,
+                            "instructor": "",
                         }
 
                         total_term = set()
@@ -108,6 +106,30 @@ class CoursesDeterministic:
                         # If the course isn't offered any of the terms, don't add it.
                         if not total_term:
                             continue
+
+                        # Extract primary instructor for the course
+                        for i in range(len(course.sections)):
+                            for j in range(len(course.sections[i].schedules)):
+                                for k in range(
+                                    len(course.sections[i].schedules[j].instructors)
+                                ):
+                                    if (
+                                        course.sections[i]
+                                        .schedules[j]
+                                        .instructors[k]
+                                        .is_primary_instructor
+                                    ):
+                                        single_course_object["instructor"] = (
+                                            course.sections[i]
+                                            .schedules[j]
+                                            .instructors[k]
+                                            .name
+                                        )
+                                        break
+                                if single_course_object["instructor"] != "":
+                                    break
+                            if single_course_object["instructor"] != "":
+                                break
 
                         single_course_object["quarters"] = list(total_term)
                         course_by_dept_list.append(single_course_object)
@@ -171,6 +193,7 @@ class CoursesDeterministic:
                             row["course_name"],
                             row["course_subject"],
                             self.find_course_category(row["course_number"]),
+                            row["instructor"],
                             tuple(set(terms)),
                         )
                     # Add same courses offered in the new year

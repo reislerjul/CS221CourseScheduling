@@ -3,8 +3,6 @@ from typing import Dict, Set, Tuple
 
 class Course:
     """_summary_
-
-
     Args:
         reward (float): _description_
         units (tuple): _description_
@@ -23,6 +21,7 @@ class Course:
         course_name: str,
         course_subject: str,
         course_category: str,
+        instructor: str,
         quarter_indices: Tuple,
     ) -> None:
 
@@ -32,6 +31,7 @@ class Course:
         self.course_name = course_name
         self.course_subject = course_subject
         self.course_category = course_category
+        self.instructor = instructor
         self.quarter_indices = quarter_indices
 
 
@@ -42,7 +42,6 @@ class ExploreCourse:
         course_category: Dict[str, Set[Course]],
     ):
         """_summary_
-
         Args:
             class_database (Dict[int, Set]): courses having the same quarter index
             course_category (Dict[str, Set]): courses having the same units category

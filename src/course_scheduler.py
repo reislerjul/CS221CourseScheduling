@@ -8,14 +8,26 @@ class State:
         current_quarter (int): _description_
         course_taken (Set): _description_
         remaining_units (Dict[str, int]): _description_
+        program_object(DegreeProgram): the selected degree program
+        remaining_instructors: remaining list of instructors that needs to be satisfied
+        remaining_research: remaining required research units
     """
 
     def __init__(
-        self, current_quarter: int, course_taken: List, remaining_units: Dict[str, int]
+        self,
+        current_quarter: int,
+        course_taken: List,
+        remaining_units: Dict[str, int],
+        program_object,
+        remaining_instructors: List,
+        remaining_resesarch: int,
     ) -> None:
         self.current_quarter = current_quarter
         self.course_taken = course_taken
         self.remaining_units = remaining_units
+        self.program_object = program_object
+        self.remaining_instructors = remaining_instructors
+        self.remaining_research = remaining_resesarch
 
     def print_state(self):
         print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")

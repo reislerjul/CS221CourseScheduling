@@ -10,7 +10,6 @@ DEPARTMENT_REQUIREMENT: Dict[str, Dict[str, int]] = {
 }
 CS_AI_PROGRAM_FILE = os.path.join("data", "cs_ai_requirements.csv")
 
-
 INDEX_QUARTER: List[str] = ["Autumn", "Winter", "Spring", "Summer"]
 
 MIN_UNITS_PER_QUARTER = 8

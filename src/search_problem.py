@@ -1,11 +1,16 @@
 from typing import Tuple, List, Dict, Optional
 from .course_scheduler import State
 from .course import ExploreCourse, Course
-from itertools import combinations
 import copy
 import heapq
+import os
+import pandas as pd
 
-from .constants import MIN_UNITS_PER_QUARTER, MAX_UNITS_PER_QUARTER, MAX_CLASS_REWARD
+from .constants import (
+    MAX_CLASS_REWARD,
+    CS_AI_PROGRAM_FILE,
+)
+from .program_requirements.cs_ai_program import CSAIProgram
 
 
 class FindCourses:
@@ -19,6 +24,12 @@ class FindCourses:
         units_requirement: Dict[str, int],
         max_quarter: int,
         max_successors: int,
+        # Newly added instructors, research_units, internship and research_terms
+        instructors: List,
+        research_units: int,
+        internship: bool,
+        research_terms: List,
+        verbose: int = 0,
     ) -> None:
         """_summary_
 
@@ -31,8 +42,37 @@ class FindCourses:
         self.units_requirement = units_requirement
         self.max_quarter = max_quarter
         self.max_successors = max_successors
+        self.instructors = instructors
+        self.research_units = research_units
+        self.internship = internship
+        self.research_terms = research_terms
 
-    def _get_actions(self, state: State) -> List[List[Tuple[Course, int]]]:
+        # import correct program based on profile
+        if not os.path.exists(CS_AI_PROGRAM_FILE):
+            raise Exception(
+                f"Cannot find path to program requirements! {CS_AI_PROGRAM_FILE} does not exist."
+            )
+        self.df_requirements = pd.read_csv(CS_AI_PROGRAM_FILE)
+        self.program_object_initial = CSAIProgram(self.df_requirements, verbose)
+
+        # For now, wave the foundation courses
+        foundations = {"CS 103", "CS 109", "CS 161", "CS 107", "CS 110"}
+        foundation_courses = set()
+        for course_list in self.explore_course.class_database.values():
+            for course in course_list:
+                if f"{course.course_subject} {course.course_number}" in foundations:
+                    foundation_courses.add(course)
+
+        for course in foundation_courses:
+            self.program_object_initial.waive_course(self.df_requirements, course)
+
+    # TODO: move utility function to a better place
+    def research_class(self, course):
+        if ("research" in course.course_name) or ("Research" in course.course_name):
+            return True
+        return False
+
+    def _get_actions(self, state: State):
         """_summary_
         Get filtered actions(course combinations).
         Filters: 1.offered in the quarter, 2.not taken before, 3.satisfy
@@ -50,6 +90,12 @@ class FindCourses:
         Returns:
             Set[Course]: _description_
         """
+
+        # ADDED: Filter out the quarter if planning to do internship during the summer
+        nxt_quarter = state.current_quarter + 1
+        if self.internship and (nxt_quarter == 4 or nxt_quarter == 8):
+            return []
+
         # Offered in the next quarter
         courses_offered = self.explore_course.class_database[state.current_quarter + 1]
 
@@ -82,25 +128,52 @@ class FindCourses:
         ]
 
         # Combinations
-        combins = combinations(candidate_courses, 2)
         actions = []
+        for course1 in candidate_courses:
 
-        for combin in combins:
-            course1 = combin[0]
-            course2 = combin[1]
+            # Filter to courses that satisfy remaining requirements
+            if not state.program_object.requirements_satisfied_by_course(
+                self.df_requirements, course1
+            ):
+                continue
 
-            for units1 in range(course1.units[0], course1.units[1] + 1):
-                for units2 in range(course2.units[0], course2.units[1] + 1):
-
-                    if (
-                        units1 + units2 >= MIN_UNITS_PER_QUARTER
-                        and units1 + units2 <= MAX_UNITS_PER_QUARTER
+            for course2 in candidate_courses:
+                if course1 == course2:
+                    continue
+                # Make sure takes research class in research quarters
+                if nxt_quarter in self.research_terms:
+                    if (not self.research_class(course1)) and (
+                        not self.research_class(course2)
                     ):
-                        actions.append([(course1, units1), (course2, units2)])
+                        continue
+                # Filter to courses that satisfy remaining requirements
+                if not state.program_object.requirements_satisfied_by_course(
+                    self.df_requirements, course2
+                ):
+                    continue
+
+                new_program_object = copy.deepcopy(state.program_object)
+
+                # TODO: try different combinations of course units; for now, this takes the maximum
+                new_program_object.take_course(
+                    self.df_requirements, (course1, course1.units[1])
+                )
+                new_program_object.take_course(
+                    self.df_requirements, (course2, course2.units[1])
+                )
+                actions.append(
+                    [
+                        (course1, course1.units[1]),
+                        (course2, course2.units[1]),
+                        new_program_object,
+                    ]
+                )
 
         return actions
 
-    def _get_quarter_cost(self, enrolled_courses: List[Tuple[Course, int]]) -> float:
+    def _get_quarter_cost(
+        self, enrolled_courses: List[Tuple[Course, int]], state: State, prereqs: List
+    ) -> float:
         """_summary_
 
         Args:
@@ -119,7 +192,29 @@ class FindCourses:
             total_units += course_and_unit[1]
             total_rewards += course_and_unit[1] * course_and_unit[0].reward
 
-        return total_units * MAX_CLASS_REWARD - total_rewards
+        # Add soft requirement for previously taken courses
+        # Give higher reward for completed prerequisites
+        # Give lower reward for non-completed prerequisites
+        # TODO: figure out how to include the prerequisites of the class
+
+        prereq_count = 0
+        for i in range(len(prereqs)):
+            if prereqs[i] in state.course_taken:
+                prereq_count += 1
+        # Current logic:
+        # Reward proportional to the number of prerequisites satisfied
+        # Maximum of 5 total rewards possible
+        total_rewards += 5 / len(prereqs) * prereq_count
+
+        # TODO: add time component for course cost
+        # Assign higher cost for courses larger than 300
+        # Provide 3 different Gaussian Distributions for possible time costs
+        #
+        #
+        #
+
+        # Note: UCS cannot have cost below 0
+        return max(total_units * MAX_CLASS_REWARD - total_rewards, 0)
 
     def start_state(self) -> State:
         """_summary_
@@ -130,8 +225,21 @@ class FindCourses:
         Returns:
             State: _description_
         """
-        # raise Exception("Not Implemented yet")
-        return State(0, [], self.units_requirement)
+        foundations = {"CS 103", "CS 109", "CS 161", "CS 107", "CS 110"}
+        foundation_courses = set()
+        for course_list in self.explore_course.class_database.values():
+            for course in course_list:
+                if f"{course.course_subject} {course.course_number}" in foundations:
+                    foundation_courses.add(course)
+
+        return State(
+            0,
+            list(foundation_courses),
+            self.units_requirement,
+            self.program_object_initial,
+            self.instructors,
+            self.research_units,
+        )
 
     def is_end(self, state: State) -> bool:
         """_summary_
@@ -146,7 +254,11 @@ class FindCourses:
             bool: _description_
         """
         # raise Exception("Not Implemented yet")
-        if sum(state.remaining_units.values()) <= 0:
+        if (
+            state.program_object.is_program_satisfied()
+            and (state.remaining_instructors == [])
+            and (state.remaining_research == 0)
+        ):
             return True
         else:
             return False
@@ -171,22 +283,39 @@ class FindCourses:
         actions = self._get_actions(state)
         successors = []
 
-        for action in actions:
+        for action_list in actions:
             suc_current_quarter = state.current_quarter + 1
             suc_remaining_units = copy.deepcopy(state.remaining_units)
+            suc_remaining_instructors = copy.deepcopy(state.remaining_instructors)
+            suc_remaining_research = copy.deepcopy(state.remaining_research)
+
+            action = [action_list[0], action_list[1]]
+            new_program_object = action_list[2]
 
             courses_this_quarter = []
             for course, units in action:
+                # TODO: include the case where a single class satisfies multiple requirements
                 suc_remaining_units[course.course_category] -= units
+                if self.research_class(course):
+                    suc_remaining_research -= units
+                if course.instructor in suc_remaining_instructors:
+                    suc_remaining_instructors.remove(course.instructor)
                 courses_this_quarter.append(course)
 
             suc_courses_taken = state.course_taken + courses_this_quarter
-            suc_cost = self._get_quarter_cost(action)
+            suc_cost = self._get_quarter_cost(action, state, [])
 
             successors.append(
                 (
                     action,
-                    State(suc_current_quarter, suc_courses_taken, suc_remaining_units),
+                    State(
+                        suc_current_quarter,
+                        suc_courses_taken,
+                        suc_remaining_units,
+                        new_program_object,
+                        suc_remaining_instructors,
+                        suc_remaining_research,
+                    ),
                     suc_cost,
                 )
             )
@@ -200,6 +329,9 @@ class FindCourses:
                         state.current_quarter + 1,
                         copy.deepcopy(state.course_taken),
                         copy.deepcopy(state.remaining_units),
+                        copy.deepcopy(state.program_object),
+                        copy.deepcopy(state.remaining_instructors),
+                        copy.deepcopy(state.remaining_research),
                     ),
                     1000,
                 )

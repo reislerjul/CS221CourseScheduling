@@ -43,6 +43,10 @@ def main(
         department_requirement,
         max_quarter=max_quarter,
         max_successors=max_successors,
+        instructors=[],
+        research_units=0,
+        internship=True,
+        research_terms=[],
     )
     ucs = UniformCostSearch(verbose=verbose)
 
