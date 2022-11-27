@@ -12,8 +12,8 @@ def main(
     program: str = "CS",
     years: List[str] = ["2021-2022", "2022-2023"],
     max_quarter: int = 8,
-    max_successors: int = 5,
-    verbose: int = 0,
+    max_successors: int = 1,
+    verbose: int = 4,
 ):
     """
     Runs the course scheduling program.
@@ -120,7 +120,7 @@ if __name__ == "__main__":
         "-v",
         "--verbose",
         type=int,
-        default=0,
+        default=4,
         help="Whether to run UCS in verbose mode.",
     )
 

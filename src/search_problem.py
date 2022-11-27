@@ -24,7 +24,7 @@ class FindCourses:
         units_requirement: Dict[str, int],
         max_quarter: int,
         max_successors: int,
-        verbose: int = 0,
+        verbose: int = 4,
     ) -> None:
         """_summary_
 
@@ -37,6 +37,7 @@ class FindCourses:
         self.units_requirement = units_requirement
         self.max_quarter = max_quarter
         self.max_successors = max_successors
+        self.verbose = verbose
 
         # TODO: import correct program based on profile
         if not os.path.exists(CS_AI_PROGRAM_FILE):
@@ -46,7 +47,7 @@ class FindCourses:
         self.df_requirements = pd.read_csv(CS_AI_PROGRAM_FILE)
         self.program_object_initial = CSAIProgram(self.df_requirements, verbose)
 
-        # For now, wave the foundation courses
+        # For now, waive the foundation courses
         foundations = {"CS 103", "CS 109", "CS 161", "CS 107", "CS 110"}
         foundation_courses = set()
         for course_list in self.explore_course.class_database.values():
@@ -102,11 +103,21 @@ class FindCourses:
 
         # Combinations
         actions = []
+        found_req = state.program_object._is_foundations_satisfied()
+        breath_req = state.program_object._is_breadth_satisfied()
+        depth_req = state.program_object._is_depth_satisfied()
+        sig_req = state.program_object._is_significant_implementation_satisfied()
         for course1 in candidate_courses:
 
             # Filter to courses that satisfy remaining requirements
-            if not state.program_object.requirements_satisfied_by_course(
+            req_course1 = state.program_object.requirements_satisfied_by_course(
                 self.df_requirements, course1
+            )
+            # Not take any electives if the prevoius requirements were not satisfied
+            if (len(req_course1) == 0) or (
+                len(req_course1) == 1
+                and req_course1[0][0] == "elective"
+                and not (found_req and breath_req and depth_req and sig_req)
             ):
                 continue
 
@@ -115,8 +126,14 @@ class FindCourses:
                     continue
 
                 # Filter to courses that satisfy remaining requirements
-                if not state.program_object.requirements_satisfied_by_course(
+                req_course2 = state.program_object.requirements_satisfied_by_course(
                     self.df_requirements, course2
+                )
+                # Not take any electives if the prevoius requirements were not satisfied
+                if (len(req_course2) == 0) or (
+                    len(req_course2) == 1
+                    and req_course2[0][0] == "elective"
+                    and not (found_req and breath_req and depth_req and sig_req)
                 ):
                     continue
 
@@ -136,7 +153,11 @@ class FindCourses:
                         new_program_object,
                     ]
                 )
-
+                # print('course1',course1.course_name)
+                # print('req1_satisfied', req_course1)
+                # print('course2',course2.course_name)
+                # print('req2_satisfied', req_course2)
+                # print()
         return actions
 
     def _get_quarter_cost(self, enrolled_courses: List[Tuple[Course, int]]) -> float:
@@ -158,6 +179,7 @@ class FindCourses:
             total_units += course_and_unit[1]
             total_rewards += course_and_unit[1] * course_and_unit[0].reward
 
+        # print('total_cost', total_units * MAX_CLASS_REWARD - total_rewards)
         return total_units * MAX_CLASS_REWARD - total_rewards
 
     def start_state(self) -> State:
@@ -230,6 +252,7 @@ class FindCourses:
 
             suc_courses_taken = state.course_taken + courses_this_quarter
             suc_cost = self._get_quarter_cost(action)
+            # print(suc_courses_taken)
 
             successors.append(
                 (

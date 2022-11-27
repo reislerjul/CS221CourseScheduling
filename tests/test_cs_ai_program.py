@@ -2,11 +2,10 @@ import pandas as pd
 import pytest
 from typing import List, Set, Tuple
 
-from src.constants import CS_AI_PROGRAM_FILE
 from src.course import Course
 from src.program_requirements.cs_ai_program import CSAIProgram
 
-
+CS_AI_PROGRAM_FILE = "../data/cs_ai_requirements.csv"
 COURSES_TO_WAIVE = [
     (
         [
@@ -296,45 +295,6 @@ def test_satisfy_depth(requirements: pd.DataFrame, program: CSAIProgram):
     assert program.significant_implementation_satisfied
 
 
-def test_satisfy_degree_no_waivers(requirements: pd.DataFrame, program: CSAIProgram):
-    """
-    Test that values are set correctly after satisfying the degree program with no waivers.
-
-    Arguments:
-    program: a newly initialized CSAIProgram
-    """
-    courses = [
-        Course(0, (3, 5), "109", "AI", "CS", "foundation", (1,)),
-        Course(0, (3, 5), "103", "AI", "CS", "foundation", (1,)),
-        Course(0, (3, 5), "161", "AI", "CS", "foundation", (1,)),
-        Course(0, (3, 5), "107", "AI", "CS", "foundation", (1,)),
-        Course(0, (3, 5), "110", "AI", "CS", "foundation", (1,)),
-        Course(0, (3, 5), "238", "AI", "CS", "breadth", (1,)),
-        Course(0, (3, 5), "237B", "AI", "CS", "breadth", (1,)),
-        Course(0, (3, 5), "224V", "AI", "CS", "breadth", (1,)),
-        Course(0, (3, 5), "224S", "AI", "CS", "breadth", (1,)),
-        Course(0, (3, 5), "221", "AI", "CS", "breadth", (1,)),
-        Course(0, (3, 5), "205", "AI", "ENGR", "breadth", (1,)),
-        Course(0, (3, 5), "166", "AI", "COMM", "breadth", (1,)),
-        Course(0, (3, 5), "251", "AI", "PHIL", "breadth", (1,)),
-        Course(0, (3, 5), "180", "AI", "EE", "breadth", (1,)),
-    ]
-    for course in courses:
-        program.take_course(requirements, (course, 4))
-
-    assert program.total_requirement_units_taken == 46
-    assert len(program.foundations_areas_left) == 0
-    assert program.foundation_units_counted == 10
-    assert program.is_program_satisfied()
-    assert program.seminar_units_taken == 0
-    assert len(program.breadth_areas_left) <= 1
-    assert program.depth_units_left <= 0
-    assert program.depth_areas_left["a"] <= 0
-    assert program.depth_areas_left["b"] <= 0
-    assert program.depth_areas_left["c"] <= 0
-    assert program.significant_implementation_satisfied
-
-
 def test_satisfy_degree_three_waivers(requirements: pd.DataFrame, program: CSAIProgram):
     """
     Test that values are set correctly after satisfying the degree program with 3 waivers.
@@ -376,6 +336,85 @@ def test_satisfy_degree_three_waivers(requirements: pd.DataFrame, program: CSAIP
     assert program.foundation_units_counted == 8
     assert program.is_program_satisfied()
     assert program.seminar_units_taken == 1
+    assert len(program.breadth_areas_left) <= 1
+    assert program.depth_units_left <= 0
+    assert program.depth_areas_left["a"] <= 0
+    assert program.depth_areas_left["b"] <= 0
+    assert program.depth_areas_left["c"] <= 0
+    assert program.significant_implementation_satisfied
+
+
+def test_satisfy_degree_no_waivers(requirements: pd.DataFrame, program: CSAIProgram):
+    """
+    Test that values are set correctly after satisfying the degree program with all
+    CS courses.
+
+    Arguments:
+    program: a newly initialized CSAIProgram
+    """
+    courses = [
+        Course(0, (3, 5), "109", "AI", "CS", "foundation", (1,)),
+        Course(0, (3, 5), "103", "AI", "CS", "foundation", (1,)),
+        Course(0, (3, 5), "161", "AI", "CS", "foundation", (1,)),
+        Course(0, (3, 5), "107", "AI", "CS", "foundation", (1,)),
+        Course(0, (3, 5), "110", "AI", "CS", "foundation", (1,)),
+        Course(0, (3, 5), "238", "AI", "CS", "breadth", (1,)),
+        Course(0, (3, 5), "237B", "AI", "CS", "breadth", (1,)),
+        Course(0, (3, 5), "224V", "AI", "CS", "breadth", (1,)),
+        Course(0, (3, 5), "224S", "AI", "CS", "breadth", (1,)),
+        Course(0, (3, 5), "221", "AI", "CS", "breadth", (1,)),
+        Course(0, (3, 5), "205", "AI", "ENGR", "breadth", (1,)),
+        Course(0, (3, 5), "166", "AI", "COMM", "breadth", (1,)),
+        Course(0, (3, 5), "251", "AI", "PHIL", "breadth", (1,)),
+        Course(0, (3, 5), "180", "AI", "EE", "breadth", (1,)),
+    ]
+    for course in courses:
+        program.take_course(requirements, (course, 4))
+
+    assert program.total_requirement_units_taken == 46
+    assert len(program.foundations_areas_left) == 0
+    assert program.foundation_units_counted == 10
+    assert program.is_program_satisfied()
+    assert program.seminar_units_taken == 0
+    assert len(program.breadth_areas_left) <= 1
+    assert program.depth_units_left <= 0
+    assert program.depth_areas_left["a"] <= 0
+    assert program.depth_areas_left["b"] <= 0
+    assert program.depth_areas_left["c"] <= 0
+    assert program.significant_implementation_satisfied
+
+
+def test_satisfy_degree_all_cs(requirements: pd.DataFrame, program: CSAIProgram):
+    """
+    Test that values are set correctly after satisfying the degree program with no waivers.
+
+    Arguments:
+    program: a newly initialized CSAIProgram
+    """
+    courses = [
+        Course(0, (3, 5), "109", "AI", "CS", "foundation", (1,)),
+        Course(0, (3, 5), "103", "AI", "CS", "foundation", (1,)),
+        Course(0, (3, 5), "161", "AI", "CS", "foundation", (1,)),
+        Course(0, (3, 5), "107", "AI", "CS", "foundation", (1,)),
+        Course(0, (3, 5), "110", "AI", "CS", "foundation", (1,)),
+        Course(0, (3, 5), "157", "AI", "CS", "breadth", (1,)),
+        Course(0, (3, 5), "223A", "AI", "CS", "breadth", (1,)),
+        Course(0, (3, 5), "224N", "AI", "CS", "breadth", (1,)),
+        Course(0, (3, 5), "225A", "AI", "CS", "breadth", (1,)),
+        Course(0, (3, 5), "221", "AI", "CS", "breadth", (1,)),
+        Course(0, (3, 5), "229", "AI", "CS", "breadth", (1,)),
+        Course(0, (3, 5), "237B", "AI", "CS", "breadth", (1,)),
+        Course(0, (3, 5), "271", "AI", "CS", "breadth", (1,)),
+        Course(0, (3, 5), "242", "AI", "CS", "breadth", (1,)),
+    ]
+    for course in courses:
+        program.take_course(requirements, (course, 4))
+
+    assert program.total_requirement_units_taken == 46
+    assert len(program.foundations_areas_left) == 0
+    assert program.foundation_units_counted == 10
+    assert program.is_program_satisfied()
+    assert program.seminar_units_taken == 0
     assert len(program.breadth_areas_left) <= 1
     assert program.depth_units_left <= 0
     assert program.depth_areas_left["a"] <= 0
