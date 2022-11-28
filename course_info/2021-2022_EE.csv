@@ -1,0 +1,134 @@
+,units_min,units_max,course_number,course_name,course_subject,quarters
+0,2,2,11SC,"Dream  It, Build It!",EE,['Summer']
+1,3,3,12Q,"Science, Technology, Art",EE,['Spring']
+2,3,3,14N,Things about Stuff,EE,['Autumn']
+3,3,3,15Q,The Art and Science of Engineering Design,EE,['Winter']
+4,3,3,17N,Engineering the Micro and Nano Worlds: From Chips to Genes,EE,['Spring']
+5,5,5,42,Introduction to Electromagnetics and Its Applications (ENGR 42),EE,['Spring']
+6,4,4,65,Modern Physics for Engineers,EE,['Spring']
+7,3,3,84N,From the Internet for People to the Internet of Things,EE,['Winter']
+8,1,1,100,The Electrical Engineering Profession,EE,['Autumn']
+9,4,4,101A,Circuits I,EE,['Winter']
+10,4,4,101B,Circuits II,EE,['Spring']
+11,4,4,102A,Signal Processing and Linear Systems I,EE,"['Summer', 'Winter']"
+12,4,4,102B,Signal Processing and Linear Systems II,EE,['Spring']
+13,3,5,104,Introduction to Machine Learning (CME 107),EE,['Spring']
+14,4,4,108,Digital System Design,EE,"['Winter', 'Autumn']"
+15,4,4,109,Digital Systems Design Lab,EE,['Spring']
+16,3,4,114,Fundamentals of Analog Integrated Circuit Design (EE 214A),EE,['Autumn']
+17,3,3,116,Semiconductor Devices for Energy and Electronics,EE,['Autumn']
+18,3,3,124,Introduction to Neuroelectrical Engineering,EE,['Winter']
+19,3,4,133,Analog Communications Design Laboratory (EE 233),EE,['Winter']
+20,4,4,134,Introduction to Photonics,EE,['Autumn']
+21,3,3,142,Engineering Electromagnetics,EE,['Winter']
+22,3,4,153,Power Electronics (EE 253),EE,['Autumn']
+23,3,3,157,"Electric Motors for Renewable Energy, Robotics, and Electric Vehicles",EE,['Spring']
+24,3,4,160A,"Principles of Robot Autonomy I (AA 174A, AA 274A, CS 237A, EE 260A)",EE,['Autumn']
+25,3,4,168,Introduction to Digital Image Processing,EE,['Winter']
+26,3,4,178,Probabilistic Systems Analysis,EE,"['Spring', 'Autumn']"
+27,3,3,179,Analog and Digital Communication Systems,EE,['Autumn']
+28,4,4,180,Digital Systems Architecture,EE,['Winter']
+29,3,3,185,Interactive Light Sculpture Project,EE,['Autumn']
+30,1,15,190,Special Studies or Projects in Electrical Engineering,EE,"['Summer', 'Winter', 'Spring', 'Autumn']"
+31,1,15,191,Special Studies and Reports in Electrical Engineering,EE,"['Summer', 'Winter', 'Autumn', 'Spring']"
+32,1,1,191A,Special Studies and Reports in Electrical Engineering,EE,"['Winter', 'Autumn', 'Spring']"
+33,3,10,191W,Special Studies and Reports in Electrical Engineering (WIM),EE,"['Summer', 'Winter', 'Autumn', 'Spring']"
+34,1,3,195,Electrical Engineering Instruction,EE,"['Winter', 'Autumn', 'Spring']"
+35,3,3,205,Product Management for Electrical Engineers and Computer Scientists,EE,['Autumn']
+36,3,3,207,Neuromorphics: Brains in Silicon (BIOE 313),EE,['Spring']
+37,3,3,212,Integrated Circuit Fabrication Processes,EE,['Autumn']
+38,3,4,214A,Fundamentals of Analog Integrated Circuit Design (EE 114),EE,['Autumn']
+39,3,3,214B,Advanced Integrated Circuit Design,EE,['Winter']
+40,3,3,216,Principles and Models of Semiconductor Devices,EE,['Autumn']
+41,3,3,218,Power Semiconductor Devices and Technology,EE,['Winter']
+42,3,3,222,Applied Quantum Mechanics I (MATSCI 201),EE,['Autumn']
+43,3,3,223,Applied Quantum Mechanics II,EE,['Winter']
+44,3,3,228,Basic Physics for Solid State Electronics,EE,['Winter']
+45,3,4,233,Analog Communications Design Laboratory (EE 133),EE,['Winter']
+46,3,3,235A,"Analytical Methods in Biotechnology (BIOS 212, RAD 236)",EE,['Winter']
+47,3,3,235B,"Analytical Methods in Biotechnology II (BIOS 212B, RAD 236B)",EE,['Spring']
+48,3,3,236A,Modern Optics,EE,['Autumn']
+49,3,3,236B,Guided Waves,EE,['Winter']
+50,3,3,236C,Lasers,EE,['Spring']
+51,3,3,237,Solar Energy Conversion,EE,['Spring']
+52,3,3,238,Introduction to Fourier Optics,EE,['Spring']
+53,3,3,242,Electromagnetic Waves,EE,['Autumn']
+54,3,3,251,High-Frequency Circuit Design Laboratory,EE,['Winter']
+55,3,4,253,Power Electronics (EE 153),EE,['Autumn']
+56,3,3,254,Advanced Topics in Power Electronics,EE,['Winter']
+57,3,4,260A,"Principles of Robot Autonomy I (AA 174A, AA 274A, CS 237A, EE 160A)",EE,['Autumn']
+58,3,4,260B,"Principles of Robot Autonomy II (AA 174B, AA 274B, CS 237B)",EE,['Winter']
+59,3,3,261,The Fourier Transform and Its Applications,EE,"['Summer', 'Autumn']"
+60,3,3,263,Introduction to Linear Dynamical Systems (CME 263),EE,"['Summer', 'Autumn']"
+61,3,4,264,Digital Signal Processing,EE,['Winter']
+62,5,5,264W,Digital Signal Processing (WIM),EE,['Winter']
+63,3,4,267,Virtual Reality,EE,['Spring']
+64,5,5,267W,Virtual Reality (WIM),EE,['Spring']
+65,3,3,269,Signal Processing for Machine Learning,EE,['Autumn']
+66,3,3,271,Introduction to VLSI Systems,EE,['Autumn']
+67,3,4,272,Design Projects in VLSI Systems I,EE,['Winter']
+68,3,3,273,Digital Systems Engineering,EE,['Winter']
+69,3,3,276,Information Theory (STATS 376A),EE,['Winter']
+70,3,3,277,Reinforcement Learning: Behaviors and Applications (MS&E 237),EE,['Autumn']
+71,3,3,278,Introduction to Statistical Signal Processing,EE,['Autumn']
+72,3,3,279,Introduction to Digital Communication,EE,['Winter']
+73,3,3,282,Computer Systems Architecture,EE,['Spring']
+74,3,3,284,Introduction to Computer Networks,EE,['Autumn']
+75,3,3,284A,Introduction to Internet of Things,EE,['Spring']
+76,3,3,285,Embedded Systems Workshop (CS 241),EE,"['Autumn', 'Spring']"
+77,1,1,290A,Curricular Practical Training for Electrical Engineers,EE,"['Summer', 'Winter', 'Autumn', 'Spring']"
+78,1,1,290B,Curricular Practical Training for Electrical Engineers,EE,"['Summer', 'Winter', 'Autumn', 'Spring']"
+79,1,1,290C,Curricular Practical Training for Electrical Engineers,EE,"['Summer', 'Winter', 'Autumn', 'Spring']"
+80,1,1,290D,Curricular Practical Training for Electrical Engineers,EE,"['Summer', 'Winter', 'Spring', 'Autumn']"
+81,1,1,290E,Curricular Practical Training for Electrical Engineers,EE,"['Summer', 'Winter', 'Autumn', 'Spring']"
+82,1,1,290F,Curricular Practical Training for Electrical Engineers,EE,"['Summer', 'Winter', 'Autumn', 'Spring']"
+83,1,1,290G,Curricular Practical Training for Electrical Engineers,EE,"['Summer', 'Winter', 'Autumn', 'Spring']"
+84,3,3,292A,Electronic Design Automation (EDA) and Machine Learning Hardware,EE,['Spring']
+85,1,1,292C,Chemical Vapor Deposition and Epitaxy for Integrated Circuits and Nanostructures,EE,['Spring']
+86,3,3,292D,Machine Learning on Embedded Systems (CS 329E),EE,['Autumn']
+87,1,1,292E,Seminar Series for Image Systems Engineering,EE,"['Winter', 'Autumn', 'Spring']"
+88,1,1,292H,"Engineering, Entrepreneurship & Climate Change",EE,['Spring']
+89,1,1,292I,Insanely Great Products: How do they get built?,EE,['Spring']
+90,3,3,292Q,3D+ Imaging Sensors,EE,['Spring']
+91,1,2,292T,SmartGrids and Advanced Power Systems Seminar (CEE 272T),EE,"['Winter', 'Spring', 'Autumn']"
+92,3,3,292Y,Software Techniques for Emergent Hardware Platforms (CS 349H),EE,['Autumn']
+93,3,3,293B,Fundamentals of Energy Processes (ENERGY 293B),EE,['Winter']
+94,1,15,300,Master's Thesis and Thesis Research,EE,"['Summer', 'Winter', 'Spring', 'Autumn']"
+95,1,1,301,Introductory Research Seminar in Electrical Engineering,EE,['Autumn']
+96,3,3,308,Advanced Circuit Techniques,EE,['Spring']
+97,3,3,309A,Semiconductor Memory Devices and Circuit Design,EE,['Autumn']
+98,3,3,309B,Emerging Non-Volatile Memory Devices and Circuit Design,EE,['Winter']
+99,1,1,310,"SystemX: Ubiquitous Sensing, Computing and Communication Seminar",EE,"['Winter', 'Spring', 'Autumn']"
+100,3,3,311,Advanced Integrated Circuits Technology,EE,['Spring']
+101,3,4,312,Integrated Circuit Fabrication Laboratory,EE,['Winter']
+102,3,3,315,Analog-Digital Interface Circuits,EE,['Autumn']
+103,3,3,316,Advanced VLSI Devices,EE,['Winter']
+104,3,3,317,Special Topics on Wide Bandgap Materials and Devices,EE,['Spring']
+105,3,3,329,The Electronic Structure of Surfaces and Interfaces (PHOTON 329),EE,['Autumn']
+106,3,3,336,Nanophotonics (MATSCI 346),EE,['Autumn']
+107,3,3,346,Introduction to Nonlinear Optics,EE,['Winter']
+108,3,3,348,Advanced Optical Fiber Communications,EE,['Autumn']
+109,3,3,355,Imaging Radar and Applications (GEOPHYS 265),EE,['Winter']
+110,3,3,356B,Magnetics Design in Power Electronics,EE,['Spring']
+111,3,3,358,Wireless System Design,EE,['Spring']
+112,3,4,359,Wireless Communications,EE,['Autumn']
+113,3,3,364A,Convex Optimization I (CME 364A),EE,"['Summer', 'Winter']"
+114,3,3,364B,Convex Optimization II (CME 364B),EE,['Spring']
+115,3,3,367,Computational Imaging (CS 448I),EE,['Winter']
+116,3,3,369B,Medical Imaging Systems II,EE,['Autumn']
+117,3,5,372,Design Projects in VLSI Systems II,EE,['Spring']
+118,3,3,374,Blockchain Foundations,EE,['Spring']
+119,3,3,377,Information Theory and Statistics (STATS 311),EE,['Autumn']
+120,3,3,378A,Statistical Signal Processing,EE,['Spring']
+121,1,1,380,Colloquium on Computer Systems,EE,"['Winter', 'Spring']"
+122,3,3,382A,Parallel Processors Beyond Multicore Processing,EE,['Spring']
+123,3,3,382C,Interconnection Networks,EE,['Winter']
+124,3,3,384S,Performance Engineering of Computer Systems & Networks,EE,['Spring']
+125,3,3,387,Algebraic Error Correcting Codes (CS 250),EE,['Winter']
+126,1,15,390,Special Studies or Projects in Electrical Engineering,EE,"['Summer', 'Winter', 'Autumn', 'Spring']"
+127,1,15,391,Special Studies and Reports in Electrical Engineering,EE,"['Summer', 'Winter', 'Spring', 'Autumn']"
+128,1,15,400,Thesis and Thesis Research,EE,"['Summer', 'Winter', 'Autumn', 'Spring']"
+129,1,1,402A,"Topics in International Technology Management (EALC 402A, EASTASN 402A)",EE,['Autumn']
+130,1,1,402T,"Entrepreneurship in Asian High Tech Industries (EALC 402T, EASTASN 402T)",EE,['Spring']
+131,0,0,801,TGR Project,EE,"['Summer', 'Winter', 'Spring', 'Autumn']"
+132,0,0,802,TGR Dissertation,EE,"['Summer', 'Winter', 'Spring', 'Autumn']"

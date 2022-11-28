@@ -33,6 +33,19 @@ class Course:
         self.course_subject = course_subject
         self.course_category = course_category
         self.quarter_indices = quarter_indices
+        # # Return whether this course is offered in |quarter| (e.g., Aut2013).
+
+    # Return whether this course is offered in |quarter| (e.g., Aut2013).
+    # def is_offered_in(self, quarter: str) -> bool:
+    #     print("a")
+    #     # return any(quarter.startswith(q) for q in self.quarter_indices)
+    #     return quarter in self.quarter_indices
+
+    # def short_str(self) -> str: return f'{self.course_number}: {self.course_name}'
+
+    # def __str__(self):
+    #     return f'Course: {self.course_number}, name: {self.course_name}, quarters: {self.quarter_indices}, '
+    #             # units: {self.minUnits}-{self.maxUnits}, prereqs: {self.prereqs}
 
 
 class ExploreCourse:

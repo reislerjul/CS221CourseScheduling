@@ -1,0 +1,21 @@
+minUnits 1
+maxUnits 9
+
+# These are the quarters that I need to fill out.
+# It is assumed that the quarters are sorted in chronological order.
+# register Aut2016
+# register Win2016
+# register Spr2017
+# register Aut2017
+
+# Courses I've already taken
+# Unit limit per quarter. You can ignore this for the first
+# few questions in problem 2.
+
+# These are the quarters that I need to fill out.
+# It is assumed that the quarters are sorted in chronological order.
+# register Aut2015
+
+
+
+# Courses that I'm requesting

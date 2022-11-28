@@ -1,0 +1,50 @@
+,units_min,units_max,course_number,course_name,course_subject,quarters
+0,5,5,100,Vector Calculus for Engineers (ENGR 154),CME,"['Autumn', 'Spring']"
+1,6,6,100ACE,"Vector Calculus for Engineers, ACE",CME,"['Autumn', 'Spring']"
+2,5,5,102,Ordinary Differential Equations for Engineers (ENGR 155A),CME,"['Summer', 'Winter', 'Autumn']"
+3,6,6,102ACE,"Ordinary Differential Equations for Engineers, ACE",CME,"['Winter', 'Autumn']"
+4,5,5,104,Linear Algebra and Partial Differential Equations for Engineers (ENGR 155B),CME,['Spring']
+5,4,4,106,Introduction to Probability and Statistics for Engineers (ENGR 155C),CME,"['Summer', 'Winter']"
+6,6,6,106ACE,"Introduction to Probability and Statistics for Engineers, ACE",CME,['Winter']
+7,3,5,107,Introduction to Machine Learning (EE 104),CME,['Spring']
+8,3,3,108,Introduction to Scientific Computing,CME,"['Summer', 'Winter']"
+9,3,3,111,The Art of Computer Modeling: Science and Data,CME,['Summer']
+10,1,1,192,Introduction to MATLAB,CME,"['Winter', 'Autumn', 'Spring']"
+11,1,1,193,Introduction to Scientific Python,CME,"['Winter', 'Autumn', 'Spring']"
+12,3,3,200,Linear Algebra with Application to Engineering Computations (ME 300A),CME,['Autumn']
+13,3,3,204,Partial Differential Equations in Engineering (ME 300B),CME,['Winter']
+14,3,3,206,Introduction to Numerical Methods for Engineering (ME 300C),CME,['Spring']
+15,3,3,211,Software Development for Scientists and Engineers,CME,['Autumn']
+16,3,3,213,"Introduction to parallel computing using MPI, openMP, and CUDA (ME 339)",CME,['Spring']
+17,3,3,216,Machine Learning for Computational Engineering. (ME 343),CME,['Winter']
+18,3,3,241,Foundations of Reinforcement Learning with Applications in Finance (MS&E 346),CME,['Winter']
+19,1,1,250,Introduction to Machine Learning,CME,['Spring']
+20,3,4,262,Imaging with Incomplete Information (CEE 260G),CME,['Spring']
+21,3,3,263,Introduction to Linear Dynamical Systems (EE 263),CME,"['Summer', 'Autumn']"
+22,3,3,279,"Computational Biology: Structure and Organization of Biomolecules and Cells (BIOE 279, BIOMEDIN 279, BIOPHYS 279, CS 279)",CME,['Autumn']
+23,3,3,285,"Computational Modeling in the Cardiovascular System (BIOE 285, ME 285)",CME,['Winter']
+24,1,6,291,Master's Research,CME,"['Summer', 'Winter', 'Spring', 'Autumn']"
+25,1,1,292,Advanced MATLAB for Scientific Computing,CME,['Winter']
+26,1,1,294,Computational Symbolic Mathematics,CME,['Winter']
+27,4,4,298,Basic Probability and Stochastic Processes with Engineering Applications (MATH 158),CME,['Spring']
+28,1,1,300,First Year Seminar Series,CME,['Autumn']
+29,1,1,300Q,ICME QUALIFYING EXAMS WORKSHOP,CME,['Spring']
+30,3,3,302,Numerical Linear Algebra,CME,['Autumn']
+31,3,3,303,Partial Differential Equations of Applied Mathematics (MATH 220),CME,['Autumn']
+32,3,3,306,Numerical Solution of Partial Differential Equations (MATH 226),CME,['Spring']
+33,3,3,307,Optimization (MS&E 311),CME,['Spring']
+34,3,3,308,"Stochastic Methods in Engineering (MATH 228, MS&E 324)",CME,['Winter']
+35,3,3,309,Randomized Algorithms and Probabilistic Analysis (CS 265),CME,['Autumn']
+36,3,3,322,Spectral Methods in Computational Physics (ME 408),CME,['Winter']
+37,3,3,330,Applied Mathematics in the Chemical and Biological Sciences (CHEMENG 300),CME,['Autumn']
+38,3,3,334,"Optimization Algorithms (CS 369O, MS&E 312)",CME,['Autumn']
+39,3,3,364A,Convex Optimization I (EE 364A),CME,"['Summer', 'Winter']"
+40,3,3,364B,Convex Optimization II (EE 364B),CME,['Spring']
+41,1,1,390,Curricular Practical Training,CME,"['Summer', 'Winter', 'Spring', 'Autumn']"
+42,1,15,399,Special Research Topics in Computational and Mathematical Engineering,CME,['Autumn']
+43,1,15,400,Ph.D. Research,CME,"['Summer', 'Winter', 'Spring', 'Autumn']"
+44,1,3,444,Computational Consulting,CME,['Spring']
+45,1,1,500,Departmental Seminar,CME,['Spring']
+46,1,1,510,Linear Algebra and Optimization Seminar,CME,['Winter']
+47,0,0,801,TGR Project,CME,"['Summer', 'Winter', 'Spring', 'Autumn']"
+48,0,0,802,TGR Dissertation,CME,"['Summer', 'Winter', 'Spring', 'Autumn']"
