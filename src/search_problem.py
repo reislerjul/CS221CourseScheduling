@@ -7,6 +7,8 @@ import os
 import pandas as pd
 
 from .constants import (
+    MIN_UNITS_PER_QUARTER,
+    MAX_UNITS_PER_QUARTER,
     MAX_CLASS_REWARD,
     CS_AI_PROGRAM_FILE,
 )
@@ -24,6 +26,7 @@ class FindCourses:
         units_requirement: Dict[str, int],
         max_quarter: int,
         max_successors: int,
+        internship: bool,
         verbose: int = 4,
     ) -> None:
         """_summary_
@@ -37,6 +40,7 @@ class FindCourses:
         self.units_requirement = units_requirement
         self.max_quarter = max_quarter
         self.max_successors = max_successors
+        self.internship = internship
         self.verbose = verbose
 
         # TODO: import correct program based on profile
@@ -76,6 +80,12 @@ class FindCourses:
         Returns:
             Set[Course]: _description_
         """
+
+        # Filter out the quarter if planning to do internship during the summer
+        nxt_quarter = state.current_quarter + 1
+        if self.internship and (nxt_quarter == 4 or nxt_quarter == 8):
+            return []
+
         # Offered in the next quarter
         courses_offered = self.explore_course.class_database[state.current_quarter + 1]
 
@@ -108,7 +118,6 @@ class FindCourses:
         depth_req = state.program_object._is_depth_satisfied()
         sig_req = state.program_object._is_significant_implementation_satisfied()
         for course1 in candidate_courses:
-
             # Filter to courses that satisfy remaining requirements
             req_course1 = state.program_object.requirements_satisfied_by_course(
                 self.df_requirements, course1
@@ -137,22 +146,28 @@ class FindCourses:
                 ):
                     continue
 
-                new_program_object = copy.deepcopy(state.program_object)
+                # try different combinations of course units
+                for units1 in range(course1.units[0], course1.units[1] + 1):
+                    for units2 in range(course2.units[0], course2.units[1] + 1):
+                        if (
+                            units1 + units2 >= MIN_UNITS_PER_QUARTER
+                            and units1 + units2 <= MAX_UNITS_PER_QUARTER
+                        ):
+                            new_program_object = copy.deepcopy(state.program_object)
 
-                # TODO: try different combinations of course units; for now, this takes the maximum
-                new_program_object.take_course(
-                    self.df_requirements, (course1, course1.units[1])
-                )
-                new_program_object.take_course(
-                    self.df_requirements, (course2, course2.units[1])
-                )
-                actions.append(
-                    [
-                        (course1, course1.units[1]),
-                        (course2, course2.units[1]),
-                        new_program_object,
-                    ]
-                )
+                            new_program_object.take_course(
+                                self.df_requirements, (course1, units1)
+                            )
+                            new_program_object.take_course(
+                                self.df_requirements, (course2, units2)
+                            )
+                            actions.append(
+                                [
+                                    (course1, units1),
+                                    (course2, units2),
+                                    new_program_object,
+                                ]
+                            )
                 # print('course1',course1.course_name)
                 # print('req1_satisfied', req_course1)
                 # print('course2',course2.course_name)

@@ -12,7 +12,8 @@ def main(
     program: str = "CS",
     years: List[str] = ["2021-2022", "2022-2023"],
     max_quarter: int = 8,
-    max_successors: int = 1,
+    max_successors: int = 5,
+    internship: bool = True,
     verbose: int = 4,
 ):
     """
@@ -43,6 +44,7 @@ def main(
         department_requirement,
         max_quarter=max_quarter,
         max_successors=max_successors,
+        internship=internship,
         verbose=verbose,
     )
     ucs = UniformCostSearch(verbose=verbose)
