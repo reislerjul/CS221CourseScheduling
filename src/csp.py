@@ -351,7 +351,13 @@ def create_sum_variable(csp: CSP, name: str, variables: List, maxSum: int) -> tu
 
 
 class SchedulingCSPConstructor:
-    def __init__(self, courses_by_quarter, df_requirements, breadth_to_satisfy):
+    def __init__(
+        self,
+        courses_by_quarter,
+        df_requirements,
+        breadth_to_satisfy,
+        foundations_not_satisfied,
+    ):
         """
         Saves the necessary data.
 
@@ -363,6 +369,7 @@ class SchedulingCSPConstructor:
         self.df_requirements = df_requirements
         self.satisfies_dict = {}
         self.breadth_to_satisfy = breadth_to_satisfy
+        self.foundations_not_satisfied = foundations_not_satisfied
 
         courses = df_requirements["Course"].values
         satisfies = df_requirements["Subcategory"].values
@@ -499,6 +506,71 @@ class SchedulingCSPConstructor:
 
             return breadth_theory_taken == breadth_theory
 
+        def _foundations_logic_constraint(classes, foundations_logic_taken):
+            if classes is None:
+                return foundations_logic_taken == 0
+
+            foundations_logic = 0
+            for course in classes:
+                satisfies = self.satisfies_dict[course]
+                if "logic" in satisfies:
+                    foundations_logic += 1
+                    break
+
+            return foundations_logic_taken == foundations_logic
+
+        def _foundations_probability_constraint(classes, foundatons_probability_taken):
+            if classes is None:
+                return foundatons_probability_taken == 0
+
+            foundations_probability = 0
+            for course in classes:
+                satisfies = self.satisfies_dict[course]
+                if "probability" in satisfies:
+                    foundations_probability += 1
+                    break
+
+            return foundatons_probability_taken == foundations_probability
+
+        def _foundations_algorithm_constraint(classes, foundations_algorthm_taken):
+            if classes is None:
+                return foundations_algorthm_taken == 0
+
+            foundations_algorthm = 0
+            for course in classes:
+                satisfies = self.satisfies_dict[course]
+                if "algorithm" in satisfies:
+                    foundations_algorthm += 1
+                    break
+
+            return foundations_algorthm_taken == foundations_algorthm
+
+        def _foundations_organ_constraint(classes, foundations_organ_taken):
+            if classes is None:
+                return foundations_organ_taken == 0
+
+            foundations_organ = 0
+            for course in classes:
+                satisfies = self.satisfies_dict[course]
+                if "organ" in satisfies:
+                    foundations_organ += 1
+                    break
+
+            return foundations_organ_taken == foundations_organ
+
+        def _foundations_systems_constraint(classes, foundations_systems_taken):
+            if classes is None:
+                return foundations_systems_taken == 0
+
+            foundations_systems = 0
+            for course in classes:
+                satisfies = self.satisfies_dict[course]
+                if "foundation systems" in satisfies:
+                    foundations_systems += 1
+                    break
+
+            return foundations_systems_taken == foundations_systems
+
         def _no_repeat_class_constraint(courses1, courses2):
             if courses1 is None or courses2 is None:
                 return True
@@ -506,6 +578,64 @@ class SchedulingCSPConstructor:
             for course in courses1:
                 if course in courses2:
                     return False
+            return True
+
+        def _no_repeat_foundations(courses):
+            if courses is None:
+                return True
+
+            course1_satisfies = self.satisfies_dict[courses[0]]
+            course2_satisfies = self.satisfies_dict[courses[1]]
+
+            foundation_courses = {
+                "logic",
+                "probability",
+                "algorithm",
+                "organ",
+                "foundation systems",
+            }
+            satisfies_intersection = course1_satisfies.intersection(course2_satisfies)
+            for element in satisfies_intersection:
+                if element in foundation_courses:
+                    return False
+            return True
+
+        def _no_repeat_foundations_quarters(courses1, courses2):
+            if courses1 is None or courses2 is None:
+                return True
+
+            foundation_courses = {
+                "logic",
+                "probability",
+                "algorithm",
+                "organ",
+                "foundation systems",
+            }
+
+            course1_satisfies = self.satisfies_dict[courses1[0]]
+            course2_satisfies = self.satisfies_dict[courses1[1]]
+            course3_satisfies = self.satisfies_dict[courses2[0]]
+            course4_satisfies = self.satisfies_dict[courses2[1]]
+
+            for element in course1_satisfies:
+                if element in foundation_courses:
+                    if (
+                        element in course2_satisfies
+                        or element in course3_satisfies
+                        or element in course4_satisfies
+                    ):
+                        return False
+
+            for element in course2_satisfies:
+                if element in foundation_courses:
+                    if element in course3_satisfies or element in course4_satisfies:
+                        return False
+
+            for element in course3_satisfies:
+                if element in foundation_courses:
+                    if element in course4_satisfies:
+                        return False
+
             return True
 
         # Note that CS221 has to be taken to satisfy depth a.
@@ -518,6 +648,11 @@ class SchedulingCSPConstructor:
         quarter_breadth_systems_variables = []
         quarter_breadth_society_variables = []
         quarter_breadth_theory_variables = []
+        quarter_foundations_logic_variables = []
+        quarter_foundations_probability_variables = []
+        quarter_foundations_algorithm_variables = []
+        quarter_foundations_organ_variables = []
+        quarter_foundations_systems_variables = []
 
         for quarter, courses in self.courses_by_quarter.items():
 
@@ -545,6 +680,8 @@ class SchedulingCSPConstructor:
                             domain.append((course_code1, course_code2))
 
             csp.add_variable(f"Quarter {quarter} classes", domain)
+            csp.add_unary_factor(f"Quarter {quarter} classes", _no_repeat_foundations)
+
             quarter_class_variables.append(f"Quarter {quarter} classes")
 
             csp.add_variable(f"Quarter {quarter} units", [0, 8])
@@ -612,12 +749,76 @@ class SchedulingCSPConstructor:
                     f"Quarter {quarter} breadth theory classes"
                 )
 
+            if "logic" in self.foundations_not_satisfied:
+                csp.add_variable(f"Quarter {quarter} foundations logic classes", [0, 1])
+                csp.add_binary_factor(
+                    f"Quarter {quarter} classes",
+                    f"Quarter {quarter} foundations logic classes",
+                    _foundations_logic_constraint,
+                )
+                quarter_foundations_logic_variables.append(
+                    f"Quarter {quarter} foundations logic classes"
+                )
+
+            if "probability" in self.foundations_not_satisfied:
+                csp.add_variable(
+                    f"Quarter {quarter} foundations probability classes", [0, 1]
+                )
+                csp.add_binary_factor(
+                    f"Quarter {quarter} classes",
+                    f"Quarter {quarter} foundations probability classes",
+                    _foundations_probability_constraint,
+                )
+                quarter_foundations_probability_variables.append(
+                    f"Quarter {quarter} foundations probability classes"
+                )
+
+            if "algorithm" in self.foundations_not_satisfied:
+                csp.add_variable(
+                    f"Quarter {quarter} foundations algorithm classes", [0, 1]
+                )
+                csp.add_binary_factor(
+                    f"Quarter {quarter} classes",
+                    f"Quarter {quarter} foundations algorithm classes",
+                    _foundations_algorithm_constraint,
+                )
+                quarter_foundations_algorithm_variables.append(
+                    f"Quarter {quarter} foundations algorithm classes"
+                )
+
+            if "organ" in self.foundations_not_satisfied:
+                csp.add_variable(f"Quarter {quarter} foundations organ classes", [0, 1])
+                csp.add_binary_factor(
+                    f"Quarter {quarter} classes",
+                    f"Quarter {quarter} foundations organ classes",
+                    _foundations_organ_constraint,
+                )
+                quarter_foundations_organ_variables.append(
+                    f"Quarter {quarter} foundations organ classes"
+                )
+
+            if "foundation systems" in self.foundations_not_satisfied:
+                csp.add_variable(
+                    f"Quarter {quarter} foundation systems classes", [0, 1]
+                )
+                csp.add_binary_factor(
+                    f"Quarter {quarter} classes",
+                    f"Quarter {quarter} foundation systems classes",
+                    _foundations_systems_constraint,
+                )
+                quarter_foundations_systems_variables.append(
+                    f"Quarter {quarter} foundation systems classes"
+                )
+
         for i in range(len(quarter_class_variables) - 1):
             quarter1 = quarter_class_variables[i]
 
             for j in range(i + 1, len(quarter_class_variables)):
                 quarter2 = quarter_class_variables[j]
                 csp.add_binary_factor(quarter1, quarter2, _no_repeat_class_constraint)
+                csp.add_binary_factor(
+                    quarter1, quarter2, _no_repeat_foundations_quarters
+                )
 
         # Degree program should be at least 45 units
         sum_var = create_sum_variable(
@@ -674,6 +875,70 @@ class SchedulingCSPConstructor:
             )
             csp.add_unary_factor(
                 sum_var, lambda breadth_theory_taken: breadth_theory_taken >= 1
+            )
+
+        # At least 1 foundations logic class
+        if "logic" in self.foundations_not_satisfied:
+            sum_var = create_sum_variable(
+                csp,
+                "program_foundations_logic_var",
+                quarter_foundations_logic_variables,
+                7,
+            )
+            csp.add_unary_factor(
+                sum_var, lambda foundations_logic_taken: foundations_logic_taken >= 1
+            )
+
+        # At least 1 foundations probability class
+        if "probability" in self.foundations_not_satisfied:
+            sum_var = create_sum_variable(
+                csp,
+                "program_foundations_probability_var",
+                quarter_foundations_probability_variables,
+                7,
+            )
+            csp.add_unary_factor(
+                sum_var,
+                lambda foundations_probability_taken: foundations_probability_taken
+                >= 1,
+            )
+
+        # At least 1 foundations algorithm class
+        if "algorithm" in self.foundations_not_satisfied:
+            sum_var = create_sum_variable(
+                csp,
+                "program_foundations_algorithm_var",
+                quarter_foundations_algorithm_variables,
+                7,
+            )
+            csp.add_unary_factor(
+                sum_var,
+                lambda foundations_algorithm_taken: foundations_algorithm_taken >= 1,
+            )
+
+        # At least 1 foundations organ class
+        if "organ" in self.foundations_not_satisfied:
+            sum_var = create_sum_variable(
+                csp,
+                "program_foundations_organ_var",
+                quarter_foundations_organ_variables,
+                7,
+            )
+            csp.add_unary_factor(
+                sum_var, lambda foundations_organ_taken: foundations_organ_taken >= 1
+            )
+
+        # At least 1 foundations systems class
+        if "foundation systems" in self.foundations_not_satisfied:
+            sum_var = create_sum_variable(
+                csp,
+                "program_foundations_systems_var",
+                quarter_foundations_systems_variables,
+                7,
+            )
+            csp.add_unary_factor(
+                sum_var,
+                lambda foundations_systems_taken: foundations_systems_taken >= 1,
             )
 
     def get_csp(self) -> CSP:

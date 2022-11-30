@@ -3,6 +3,9 @@ breadth_areas: # Note: applications will always be satisfied, so we don't need t
   #- systems
   - society
   - theory
-foundations_satisfied:
-  - logic
+foundations_not_satisfied: # For simplicity in the CSP, at most 2 foundations can be unsatisfied
+  #- logic
   - probability
+  #- algorithm
+  #- organ
+  - foundation systems

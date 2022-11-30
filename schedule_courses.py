@@ -100,14 +100,37 @@ def main(
 
         internship = student_config["internship"]
         breadth_to_satisfy = student_config["breadth_areas"]
+        foundations_not_satisfied = (
+            student_config["foundations_not_satisfied"]
+            if student_config["foundations_not_satisfied"]
+            else []
+        )
 
         if len(breadth_to_satisfy) != 2:
             raise Exception(
                 f"Must specify 2 breadth areas! Got {len(breadth_to_satisfy)}"
             )
 
+        if len(foundations_not_satisfied) > 2:
+            raise Exception(
+                f"Can only handle up to 2 unsatisfied foundations! Got {len(foundations_not_satisfied)}"
+            )
+
         # Filter to courses that satisfy CS program requirements (not including electives)
         df_requirements = pd.read_csv(CS_AI_PROGRAM_FILE)
+
+        # Remove foundations that are already satisfied
+        foundations_satisfied = {
+            "logic",
+            "probability",
+            "algorithm",
+            "organ",
+            "foundation systems",
+        } - set(foundations_not_satisfied)
+        df_requirements = df_requirements.loc[
+            ~df_requirements["Subcategory"].isin(foundations_satisfied)
+        ]
+
         courses_by_quarter_filtered: Dict[int, List[Course]] = {}
         requirement_courses = set(df_requirements["Course"])
         for quarter_index, courses in course_by_quarter.items():
@@ -127,7 +150,10 @@ def main(
 
         print("START constructing CSP")
         cspConstructor = SchedulingCSPConstructor(
-            courses_by_quarter_filtered, df_requirements, breadth_to_satisfy
+            courses_by_quarter_filtered,
+            df_requirements,
+            breadth_to_satisfy,
+            foundations_not_satisfied,
         )
         csp = cspConstructor.get_csp()
         print("FINISHED constructing CSP")
