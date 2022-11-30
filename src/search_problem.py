@@ -19,6 +19,7 @@ class FindCourses:
         units_requirement: Dict[str, int],
         max_quarter: int,
         max_successors: int,
+        verbose: int,
     ) -> None:
         """_summary_
 
@@ -31,6 +32,7 @@ class FindCourses:
         self.units_requirement = units_requirement
         self.max_quarter = max_quarter
         self.max_successors = max_successors
+        self.verbose = verbose
 
     def _get_actions(self, state: State) -> List[List[Tuple[Course, int]]]:
         """_summary_

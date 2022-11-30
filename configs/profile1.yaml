@@ -1,0 +1,8 @@
+internship: True
+breadth_areas: # Note: applications will always be satisfied, so we don't need to include it. Options are systems, society, and theory
+  #- systems
+  - society
+  - theory
+foundations_satisfied:
+  - logic
+  - probability
