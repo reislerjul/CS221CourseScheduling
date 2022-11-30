@@ -359,6 +359,7 @@ class SchedulingCSPConstructor:
         foundations_not_satisfied,
         nlp_courses,
         robotics_courses,
+        vision_courses,
         custom_requests,
     ):
         """
@@ -375,6 +376,7 @@ class SchedulingCSPConstructor:
         self.foundations_not_satisfied = foundations_not_satisfied
         self.nlp_courses = nlp_courses
         self.robotics_courses = robotics_courses
+        self.vision_courses = vision_courses
         self.custom_requests = custom_requests
 
         courses = df_requirements["Course"].values
@@ -599,6 +601,17 @@ class SchedulingCSPConstructor:
 
             return nlp == nlp_taken
 
+        def _vision_constraint(classes, vision_taken):
+            if classes is None:
+                return vision_taken == 0
+
+            vision = 0
+            for course in classes:
+                if course in self.vision_courses:
+                    vision += 1
+
+            return vision == vision_taken
+
         def _no_repeat_class_constraint(courses1, courses2):
             if courses1 is None or courses2 is None:
                 return True
@@ -683,6 +696,7 @@ class SchedulingCSPConstructor:
         quarter_foundations_systems_variables = []
         quarter_robotics_variables = []
         quarter_nlp_variables = []
+        quarter_vision_variables = []
 
         for quarter, courses in self.courses_by_quarter.items():
 
@@ -858,6 +872,15 @@ class SchedulingCSPConstructor:
                 )
                 quarter_nlp_variables.append(f"Quarter {quarter} nlp classes")
 
+            if "vision" in self.custom_requests:
+                csp.add_variable(f"Quarter {quarter} vision classes", [0, 1, 2])
+                csp.add_binary_factor(
+                    f"Quarter {quarter} classes",
+                    f"Quarter {quarter} vision classes",
+                    _vision_constraint,
+                )
+                quarter_vision_variables.append(f"Quarter {quarter} vision classes")
+
         for i in range(len(quarter_class_variables) - 1):
             quarter1 = quarter_class_variables[i]
 
@@ -1012,6 +1035,18 @@ class SchedulingCSPConstructor:
             csp.add_unary_factor(
                 sum_var,
                 lambda nlp_taken: nlp_taken >= self.custom_requests["nlp"],
+            )
+
+        if "vision" in self.custom_requests:
+            sum_var = create_sum_variable(
+                csp,
+                "program_vision_var",
+                quarter_vision_variables,
+                7,
+            )
+            csp.add_unary_factor(
+                sum_var,
+                lambda vision_taken: vision_taken >= self.custom_requests["vision"],
             )
 
     def get_csp(self) -> CSP:
