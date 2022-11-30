@@ -357,6 +357,9 @@ class SchedulingCSPConstructor:
         df_requirements,
         breadth_to_satisfy,
         foundations_not_satisfied,
+        nlp_courses,
+        robotics_courses,
+        custom_requests,
     ):
         """
         Saves the necessary data.
@@ -370,6 +373,9 @@ class SchedulingCSPConstructor:
         self.satisfies_dict = {}
         self.breadth_to_satisfy = breadth_to_satisfy
         self.foundations_not_satisfied = foundations_not_satisfied
+        self.nlp_courses = nlp_courses
+        self.robotics_courses = robotics_courses
+        self.custom_requests = custom_requests
 
         courses = df_requirements["Course"].values
         satisfies = df_requirements["Subcategory"].values
@@ -571,6 +577,17 @@ class SchedulingCSPConstructor:
 
             return foundations_systems_taken == foundations_systems
 
+        def _robotics_constraint(classes, robotics_taken):
+            if classes is None:
+                return robotics_taken == 0
+
+            robotics = 0
+            for course in classes:
+                if course in self.robotics_courses:
+                    robotics += 1
+
+            return robotics == robotics_taken
+
         def _no_repeat_class_constraint(courses1, courses2):
             if courses1 is None or courses2 is None:
                 return True
@@ -653,6 +670,7 @@ class SchedulingCSPConstructor:
         quarter_foundations_algorithm_variables = []
         quarter_foundations_organ_variables = []
         quarter_foundations_systems_variables = []
+        quarter_robotics_variables = []
 
         for quarter, courses in self.courses_by_quarter.items():
 
@@ -810,6 +828,15 @@ class SchedulingCSPConstructor:
                     f"Quarter {quarter} foundation systems classes"
                 )
 
+            if "robotics" in self.custom_requests:
+                csp.add_variable(f"Quarter {quarter} robotics classes", [0, 1, 2])
+                csp.add_binary_factor(
+                    f"Quarter {quarter} classes",
+                    f"Quarter {quarter} robotics classes",
+                    _robotics_constraint,
+                )
+                quarter_robotics_variables.append(f"Quarter {quarter} robotics classes")
+
         for i in range(len(quarter_class_variables) - 1):
             quarter1 = quarter_class_variables[i]
 
@@ -939,6 +966,19 @@ class SchedulingCSPConstructor:
             csp.add_unary_factor(
                 sum_var,
                 lambda foundations_systems_taken: foundations_systems_taken >= 1,
+            )
+
+        if "robotics" in self.custom_requests:
+            sum_var = create_sum_variable(
+                csp,
+                "program_robotics_var",
+                quarter_robotics_variables,
+                7,
+            )
+            csp.add_unary_factor(
+                sum_var,
+                lambda robotics_taken: robotics_taken
+                >= self.custom_requests["robotics"],
             )
 
     def get_csp(self) -> CSP:
