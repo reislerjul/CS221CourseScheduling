@@ -176,7 +176,11 @@ def main(
         if internship:
             del courses_by_quarter_filtered[4]
 
-        natural_language_keywords = ["natural language", "language understanding"]
+        natural_language_keywords = [
+            "natural language",
+            "language understanding",
+            "linguist",
+        ]
         nlp_courses = set()
         for quarter_index, courses in courses_by_quarter_filtered.items():
             for course in courses:
@@ -209,6 +213,17 @@ def main(
                         )
                         break
 
+        health_keywords = ["disease", "health", "biomedical", "biomedin"]
+        health_courses = set()
+        for quarter_index, courses in courses_by_quarter_filtered.items():
+            for course in courses:
+                for keyword in health_keywords:
+                    if keyword in course.course_name.lower():
+                        health_courses.add(
+                            f"{course.course_subject} {course.course_number}"
+                        )
+                        break
+
         print("START constructing CSP")
         cspConstructor = SchedulingCSPConstructor(
             courses_by_quarter_filtered,
@@ -218,6 +233,7 @@ def main(
             nlp_courses,
             robotics_courses,
             vision_courses,
+            health_courses,
             custom_requests,
         )
         csp = cspConstructor.get_csp()
