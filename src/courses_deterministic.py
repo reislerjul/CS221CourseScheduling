@@ -68,11 +68,13 @@ class CoursesDeterministic:
             os.makedirs(self.output_dir)
 
         for year in self.years:
+            courses_by_dept = []
             for dept in self.depts:
 
                 year_dept_filepath = os.path.join(self.output_dir, f"{year}_{dept}.csv")
 
-                if not os.path.exists(year_dept_filepath):
+                # if not os.path.exists(year_dept_filepath):
+                if True:
                     print(
                         f"No file available for {year} {dept}, will extract from explorecourses."
                     )
@@ -81,7 +83,21 @@ class CoursesDeterministic:
                     cur_courses = self.connect.get_courses_by_department(
                         dept, year=year
                     )
+                    for req_course in self.requirement_file.iloc[:, 0]:
+                        subject, code = req_course.split()[0:2]
+                        if subject == "CS":
+                            continue
+                        query = subject + code
+                        additional_courses = self.connect.get_courses_by_query(query)
+                        for add_course in additional_courses:
+                            if (
+                                add_course.subject == subject
+                                and add_course.code == code
+                            ):
+                                cur_courses.append(add_course)
+                                break
                     course_by_dept_list = []
+
                     for i in range(len(cur_courses)):
                         course = cur_courses[i]
                         # TODO: what to put in reward, putting 0 for placeholder
@@ -111,7 +127,7 @@ class CoursesDeterministic:
 
                         single_course_object["quarters"] = list(total_term)
                         course_by_dept_list.append(single_course_object)
-
+                    courses_by_dept.append(course_by_dept_list)
                     course_by_dept = pd.DataFrame(course_by_dept_list)
 
                     course_by_dept.to_csv(year_dept_filepath)
