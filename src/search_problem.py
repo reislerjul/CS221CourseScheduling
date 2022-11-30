@@ -1,11 +1,18 @@
 from typing import Tuple, List, Dict, Optional
 from .course_scheduler import State
 from .course import ExploreCourse, Course
-from itertools import combinations
 import copy
 import heapq
+import os
+import pandas as pd
 
-from .constants import MIN_UNITS_PER_QUARTER, MAX_UNITS_PER_QUARTER, MAX_CLASS_REWARD
+from .constants import (
+    MIN_UNITS_PER_QUARTER,
+    MAX_UNITS_PER_QUARTER,
+    MAX_CLASS_REWARD,
+    CS_AI_PROGRAM_FILE,
+)
+from .program_requirements.cs_ai_program import CSAIProgram
 
 
 class FindCourses:
@@ -19,7 +26,8 @@ class FindCourses:
         units_requirement: Dict[str, int],
         max_quarter: int,
         max_successors: int,
-        verbose: int,
+        internship: bool,
+        verbose: int = 4,
     ) -> None:
         """_summary_
 
@@ -32,7 +40,27 @@ class FindCourses:
         self.units_requirement = units_requirement
         self.max_quarter = max_quarter
         self.max_successors = max_successors
+        self.internship = internship
         self.verbose = verbose
+
+        # TODO: import correct program based on profile
+        if not os.path.exists(CS_AI_PROGRAM_FILE):
+            raise Exception(
+                f"Cannot find path to program requirements! {CS_AI_PROGRAM_FILE} does not exist."
+            )
+        self.df_requirements = pd.read_csv(CS_AI_PROGRAM_FILE)
+        self.program_object_initial = CSAIProgram(self.df_requirements, verbose)
+
+        # For now, waive the foundation courses
+        foundations = {"CS 103", "CS 109", "CS 161", "CS 107", "CS 110"}
+        foundation_courses = set()
+        for course_list in self.explore_course.class_database.values():
+            for course in course_list:
+                if f"{course.course_subject} {course.course_number}" in foundations:
+                    foundation_courses.add(course)
+
+        for course in foundation_courses:
+            self.program_object_initial.waive_course(self.df_requirements, course)
 
     def _get_actions(self, state: State) -> List[List[Tuple[Course, int]]]:
         """_summary_
@@ -52,6 +80,12 @@ class FindCourses:
         Returns:
             Set[Course]: _description_
         """
+
+        # Filter out the quarter if planning to do internship during the summer
+        nxt_quarter = state.current_quarter + 1
+        if self.internship and (nxt_quarter == 4 or nxt_quarter == 8):
+            return []
+
         # Offered in the next quarter
         courses_offered = self.explore_course.class_database[state.current_quarter + 1]
 
@@ -70,36 +104,77 @@ class FindCourses:
             for course in candidate_courses
             if course.units[0] >= 3 and course.units[1] <= 5
         ]
+
         candidate_courses = [
             course
             for course in candidate_courses
             if int("".join(filter(str.isdigit, course.course_number))) >= 100
         ]
 
-        # Filter to courses that satisfy remaining requirements
-        candidate_courses = [
-            course
-            for course in candidate_courses
-            if state.remaining_units[course.course_category] > 0
-        ]
+        # TODO: Add hard requriments for prerequisites
 
         # Combinations
-        combins = combinations(candidate_courses, 2)
         actions = []
+        found_req = state.program_object._is_foundations_satisfied()
+        breath_req = state.program_object._is_breadth_satisfied()
+        depth_req = state.program_object._is_depth_satisfied()
+        sig_req = state.program_object._is_significant_implementation_satisfied()
+        for course1 in candidate_courses:
+            # Filter to courses that satisfy remaining requirements
+            req_course1 = state.program_object.requirements_satisfied_by_course(
+                self.df_requirements, course1
+            )
+            # Not take any electives if the prevoius requirements were not satisfied
+            if (len(req_course1) == 0) or (
+                len(req_course1) == 1
+                and req_course1[0][0] == "elective"
+                and not (found_req and breath_req and depth_req and sig_req)
+            ):
+                continue
 
-        for combin in combins:
-            course1 = combin[0]
-            course2 = combin[1]
+            for course2 in candidate_courses:
+                if course1 == course2:
+                    continue
 
-            for units1 in range(course1.units[0], course1.units[1] + 1):
-                for units2 in range(course2.units[0], course2.units[1] + 1):
+                # Filter to courses that satisfy remaining requirements
+                req_course2 = state.program_object.requirements_satisfied_by_course(
+                    self.df_requirements, course2
+                )
+                # Not take any electives if the prevoius requirements were not satisfied
+                if (len(req_course2) == 0) or (
+                    len(req_course2) == 1
+                    and req_course2[0][0] == "elective"
+                    and not (found_req and breath_req and depth_req and sig_req)
+                ):
+                    continue
 
-                    if (
-                        units1 + units2 >= MIN_UNITS_PER_QUARTER
-                        and units1 + units2 <= MAX_UNITS_PER_QUARTER
-                    ):
-                        actions.append([(course1, units1), (course2, units2)])
+                # try different combinations of course units
+                for units1 in range(course1.units[0], course1.units[1] + 1):
+                    for units2 in range(course2.units[0], course2.units[1] + 1):
+                        if (
+                            units1 + units2 >= MIN_UNITS_PER_QUARTER
+                            and units1 + units2 <= MAX_UNITS_PER_QUARTER
+                        ):
+                            new_program_object = copy.deepcopy(state.program_object)
 
+                            new_program_object.take_course(
+                                self.df_requirements, (course1, units1)
+                            )
+                            new_program_object.take_course(
+                                self.df_requirements, (course2, units2)
+                            )
+                            actions.append(
+                                [
+                                    (course1, units1),
+                                    (course2, units2),
+                                    new_program_object,
+                                ]
+                            )
+                # print('course1',course1.course_name)
+                # print('req1_satisfied', req_course1)
+                # print('course2',course2.course_name)
+                # print('req2_satisfied', req_course2)
+                # print()
         return actions
 
     def _get_quarter_cost(self, enrolled_courses: List[Tuple[Course, int]]) -> float:
@@ -121,6 +196,7 @@ class FindCourses:
             total_units += course_and_unit[1]
             total_rewards += course_and_unit[1] * course_and_unit[0].reward
 
+        # print('total_cost', total_units * MAX_CLASS_REWARD - total_rewards)
         return total_units * MAX_CLASS_REWARD - total_rewards
 
     def start_state(self) -> State:
@@ -132,8 +208,19 @@ class FindCourses:
         Returns:
             State: _description_
         """
-        # raise Exception("Not Implemented yet")
-        return State(0, [], self.units_requirement)
+        foundations = {"CS 103", "CS 109", "CS 161", "CS 107", "CS 110"}
+        foundation_courses = set()
+        for course_list in self.explore_course.class_database.values():
+            for course in course_list:
+                if f"{course.course_subject} {course.course_number}" in foundations:
+                    foundation_courses.add(course)
+
+        return State(
+            0,
+            list(foundation_courses),
+            self.units_requirement,
+            self.program_object_initial,
+        )
 
     def is_end(self, state: State) -> bool:
         """_summary_
@@ -147,11 +234,7 @@ class FindCourses:
         Returns:
             bool: _description_
         """
-        # raise Exception("Not Implemented yet")
-        if sum(state.remaining_units.values()) <= 0:
-            return True
-        else:
-            return False
+        return state.program_object.is_program_satisfied()
 
     def successors_and_cost(
         self, state: State
@@ -172,10 +255,12 @@ class FindCourses:
 
         actions = self._get_actions(state)
         successors = []
-
-        for action in actions:
+        for action_list in actions:
             suc_current_quarter = state.current_quarter + 1
             suc_remaining_units = copy.deepcopy(state.remaining_units)
+
+            action = [action_list[0], action_list[1]]
+            new_program_object = action_list[2]
 
             courses_this_quarter = []
             for course, units in action:
@@ -184,11 +269,17 @@ class FindCourses:
 
             suc_courses_taken = state.course_taken + courses_this_quarter
             suc_cost = self._get_quarter_cost(action)
+            # print(suc_courses_taken)
 
             successors.append(
                 (
                     action,
-                    State(suc_current_quarter, suc_courses_taken, suc_remaining_units),
+                    State(
+                        suc_current_quarter,
+                        suc_courses_taken,
+                        suc_remaining_units,
+                        new_program_object,
+                    ),
                     suc_cost,
                 )
             )
@@ -202,6 +293,7 @@ class FindCourses:
                         state.current_quarter + 1,
                         copy.deepcopy(state.course_taken),
                         copy.deepcopy(state.remaining_units),
+                        copy.deepcopy(state.program_object),
                     ),
                     1000,
                 )

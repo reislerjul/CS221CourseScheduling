@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import pandas as pd
 from typing import List, Tuple
 
 from ..course import Course
@@ -24,7 +25,9 @@ class DegreeProgram(ABC):
         pass
 
     @abstractmethod
-    def take_course(self, course_and_units: Tuple[Course, int]):
+    def take_course(
+        self, df_requirements: pd.DataFrame, course_and_units: Tuple[Course, int]
+    ):
         """
         Update the remaining requirements for the degree program object based on the course that is taken.
 
@@ -34,7 +37,7 @@ class DegreeProgram(ABC):
         pass
 
     @abstractmethod
-    def waive_course(self, course: Course):
+    def waive_course(self, df_requirements: pd.DataFrame, course: Course):
         """
         Update the remaining requirements for the degree program object based on the course that is waived.
 
@@ -44,7 +47,9 @@ class DegreeProgram(ABC):
         pass
 
     @abstractmethod
-    def requirements_satisfied_by_course(self, course: Course) -> List[Tuple[str, str]]:
+    def requirements_satisfied_by_course(
+        self, df_requirements: pd.DataFrame, course: Course
+    ) -> List[Tuple[str, str]]:
         """
         Returns a list of the remaining requirements that are satisfied by the course.
 

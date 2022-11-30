@@ -23,7 +23,7 @@ def get_courses_to_categories():
 
     """
     csv_contents = {}
-    with open("./data/cs_requirements.csv") as course_reqs:
+    with open("../data/cs_requirements.csv") as course_reqs:
         for line in csv.reader(course_reqs):
             line = line[0].split()
             csv_contents[line[1]] = line[2]
@@ -39,7 +39,7 @@ def get_courses_by_term():
 
     """
     csv_contents = {}
-    with open("./data/2022-2023_CS.csv") as courses_terms:
+    with open("../data/2022-2023_CS.csv") as courses_terms:
         next(courses_terms)
         for line in csv.reader(courses_terms):
             course_num = line[3]
