@@ -1,6 +1,7 @@
 import os
 from typing import Dict, List
 
+
 # TODO: this is an over-simplification of the degree requirements. For the next version, we need to incorporate
 # a more accurate version of this
 DEPARTMENT_REQUIREMENT: Dict[str, Dict[str, int]] = {
