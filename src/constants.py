@@ -16,3 +16,5 @@ INDEX_QUARTER: List[str] = ["Autumn", "Winter", "Spring", "Summer"]
 MIN_UNITS_PER_QUARTER = 8
 MAX_UNITS_PER_QUARTER = 12
 MAX_CLASS_REWARD = 5
+
+CONFIG_FOLDER = "configs"
