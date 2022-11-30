@@ -300,7 +300,7 @@ if __name__ == "__main__":
         "-m",
         "--model",
         type=str,
-        default="search",
+        default="CSP",
         help="Whether to model the problem as a search problem or CSP.",
     )
     parser.add_argument(
