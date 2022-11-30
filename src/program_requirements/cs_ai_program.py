@@ -79,7 +79,8 @@ class CSAIProgram(DegreeProgram):
         """
         return self.total_requirement_units_taken >= TOTAL_UNITS_REQUIRED
 
-    def _is_seminar_course(self, course_code: str) -> bool:
+    @staticmethod
+    def _is_seminar_course(course_code: str) -> bool:
         """
         Check whether course is a seminar.
 
@@ -121,7 +122,7 @@ class CSAIProgram(DegreeProgram):
 
         # Seminars
         if self.seminar_units_taken <= 3:
-            return self._is_seminar_course(course_code)
+            return CSAIProgram._is_seminar_course(course_code)
 
         return False
 
@@ -176,7 +177,7 @@ class CSAIProgram(DegreeProgram):
             if category == "significant implementation":
                 self.significant_implementation_satisfied = True
 
-        if self._is_seminar_course(full_course_code):
+        if CSAIProgram._is_seminar_course(full_course_code):
             units_towards_degree = min(units, 3 - self.seminar_units_taken)
             self.seminar_units_taken += units_towards_degree
 

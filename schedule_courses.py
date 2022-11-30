@@ -3,6 +3,7 @@ import os
 import pandas as pd
 from typing import Dict, List
 import yaml  # type: ignore[import]
+import random
 
 from src.constants import (
     CONFIG_FOLDER,
@@ -14,6 +15,7 @@ from src.courses_deterministic import CoursesDeterministic
 from src.course import Course, ExploreCourse
 from src.search_problem import FindCourses, UniformCostSearch
 from src.csp import SchedulingCSPConstructor, BacktrackingSearch
+from src.program_requirements.cs_ai_program import CSAIProgram
 
 
 def get_course_id_to_name(courses_by_quarter):
@@ -23,6 +25,21 @@ def get_course_id_to_name(courses_by_quarter):
             course_id = f"{course.course_subject} {course.course_number}"
             course_id_to_name[course_id] = course.course_name
     return course_id_to_name
+
+
+def get_one_unit_seminar_courses(courses_by_quarter):
+    seminars = {}
+    for quarter_index, courses in courses_by_quarter.items():
+        seminars[quarter_index] = []
+        for course in courses:
+            course_id = f"{course.course_subject} {course.course_number}"
+            if (
+                CSAIProgram._is_seminar_course(course_id)
+                and course.units[0] >= 1
+                and course.units[0] <= 2
+            ):
+                seminars[quarter_index].append(course)
+    return seminars
 
 
 def main(
@@ -175,10 +192,13 @@ def main(
         if len(alg.allOptimalAssignments) >= 1:
             assignment = alg.allOptimalAssignments[0]
             course_id_to_name = get_course_id_to_name(courses_by_quarter_filtered)
+            seminar_courses_one_unit = get_one_unit_seminar_courses(course_by_quarter)
+            seminars_taken = set()
 
             print("PRINTING course schedule...")
             print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n")
             for i in range(7):
+
                 season = INDEX_QUARTER[i % len(INDEX_QUARTER)]
                 print(f"** Quarter: {i + 1}, Season: {season} **")
 
@@ -191,6 +211,14 @@ def main(
                         print(
                             f"Course: {course} {course_id_to_name[course]} || Units: 4"
                         )
+
+                    take_seminar = random.random() <= 0.5
+                    if take_seminar:
+                        seminar_courses_quarter = seminar_courses_one_unit[i + 1]
+                        seminar = random.sample(seminar_courses_quarter, 1)[0]
+                        seminar_id = f"{seminar.course_subject} {seminar.course_number}"
+                        print(f"Course: {seminar_id} {seminar.course_name} || Units: 1")
+                        seminars_taken.add(seminar)
 
                 print()
 
