@@ -50,7 +50,8 @@ def main(
     max_successors: int = 5,
     model: str = "CSP",
     config_name: str = "profile1.yaml",
-    verbose: int = 0,
+    internship: bool = True,
+    verbose: int = 4,
 ):
     """
     Runs the course scheduling program.
@@ -72,10 +73,9 @@ def main(
     # Step 2: Initialize the problem.
     if model not in {"CSP", "search"}:
         raise Exception(f"model {model} not implemented!")
-
+    # This second argument to ExploreCourse is never used; we could probably do
+    # away with ExploreCourse and just pass course_by_quarter to FindCourses
     if model == "search":
-        # This second argument to ExploreCourse is never used; we could probably do
-        # away with ExploreCourse and just pass course_by_quarter to FindCourses
         explore_course = ExploreCourse(course_by_quarter, {})
         department_requirement = DEPARTMENT_REQUIREMENT[program]
         search_problem = FindCourses(
@@ -83,6 +83,7 @@ def main(
             department_requirement,
             max_quarter=max_quarter,
             max_successors=max_successors,
+            internship=internship,
             verbose=verbose,
         )
         ucs = UniformCostSearch(verbose=verbose)
@@ -113,8 +114,8 @@ def main(
                 print()
             print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
             print("END Course Scheduling.")
-    elif model == "CSP":
 
+    elif model == "CSP":
         # Load config from yaml file
         config_filepath = os.path.join(CONFIG_FOLDER, config_name)
 
@@ -299,7 +300,7 @@ if __name__ == "__main__":
         "-m",
         "--model",
         type=str,
-        default="CSP",
+        default="search",
         help="Whether to model the problem as a search problem or CSP.",
     )
     parser.add_argument(
@@ -313,7 +314,7 @@ if __name__ == "__main__":
         "-v",
         "--verbose",
         type=int,
-        default=0,
+        default=4,
         help="Whether to run UCS in verbose mode.",
     )
 
