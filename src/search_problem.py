@@ -111,6 +111,8 @@ class FindCourses:
             if int("".join(filter(str.isdigit, course.course_number))) >= 100
         ]
 
+        # TODO: Add hard requriments for prerequisites
+
         # Combinations
         actions = []
         found_req = state.program_object._is_foundations_satisfied()
