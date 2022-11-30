@@ -588,6 +588,17 @@ class SchedulingCSPConstructor:
 
             return robotics == robotics_taken
 
+        def _nlp_constraint(classes, nlp_taken):
+            if classes is None:
+                return nlp_taken == 0
+
+            nlp = 0
+            for course in classes:
+                if course in self.nlp_courses:
+                    nlp += 1
+
+            return nlp == nlp_taken
+
         def _no_repeat_class_constraint(courses1, courses2):
             if courses1 is None or courses2 is None:
                 return True
@@ -671,6 +682,7 @@ class SchedulingCSPConstructor:
         quarter_foundations_organ_variables = []
         quarter_foundations_systems_variables = []
         quarter_robotics_variables = []
+        quarter_nlp_variables = []
 
         for quarter, courses in self.courses_by_quarter.items():
 
@@ -837,6 +849,15 @@ class SchedulingCSPConstructor:
                 )
                 quarter_robotics_variables.append(f"Quarter {quarter} robotics classes")
 
+            if "nlp" in self.custom_requests:
+                csp.add_variable(f"Quarter {quarter} nlp classes", [0, 1, 2])
+                csp.add_binary_factor(
+                    f"Quarter {quarter} classes",
+                    f"Quarter {quarter} nlp classes",
+                    _nlp_constraint,
+                )
+                quarter_nlp_variables.append(f"Quarter {quarter} nlp classes")
+
         for i in range(len(quarter_class_variables) - 1):
             quarter1 = quarter_class_variables[i]
 
@@ -979,6 +1000,18 @@ class SchedulingCSPConstructor:
                 sum_var,
                 lambda robotics_taken: robotics_taken
                 >= self.custom_requests["robotics"],
+            )
+
+        if "nlp" in self.custom_requests:
+            sum_var = create_sum_variable(
+                csp,
+                "program_nlp_var",
+                quarter_nlp_variables,
+                7,
+            )
+            csp.add_unary_factor(
+                sum_var,
+                lambda nlp_taken: nlp_taken >= self.custom_requests["nlp"],
             )
 
     def get_csp(self) -> CSP:
