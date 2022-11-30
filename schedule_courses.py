@@ -198,6 +198,17 @@ def main(
                         )
                         break
 
+        vision_keywords = ["vision", "visual"]
+        vision_courses = set()
+        for quarter_index, courses in courses_by_quarter_filtered.items():
+            for course in courses:
+                for keyword in vision_keywords:
+                    if keyword in course.course_name.lower():
+                        vision_courses.add(
+                            f"{course.course_subject} {course.course_number}"
+                        )
+                        break
+
         print("START constructing CSP")
         cspConstructor = SchedulingCSPConstructor(
             courses_by_quarter_filtered,
@@ -206,6 +217,7 @@ def main(
             foundations_not_satisfied,
             nlp_courses,
             robotics_courses,
+            vision_courses,
             custom_requests,
         )
         csp = cspConstructor.get_csp()
