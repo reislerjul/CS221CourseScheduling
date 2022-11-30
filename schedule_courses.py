@@ -16,6 +16,15 @@ from src.search_problem import FindCourses, UniformCostSearch
 from src.csp import SchedulingCSPConstructor, BacktrackingSearch
 
 
+def get_course_id_to_name(courses_by_quarter):
+    course_id_to_name = {}
+    for _, courses in courses_by_quarter.items():
+        for course in courses:
+            course_id = f"{course.course_subject} {course.course_number}"
+            course_id_to_name[course_id] = course.course_name
+    return course_id_to_name
+
+
 def main(
     data_directory: str = "data",
     program: str = "CS",
@@ -163,8 +172,32 @@ def main(
         alg.solve(csp, mcv=True, ac3=True)
         print("FINISHED solving CSP")
 
-        for assignment in alg.allOptimalAssignments:
-            print(assignment)
+        if len(alg.allOptimalAssignments) >= 1:
+            assignment = alg.allOptimalAssignments[0]
+            course_id_to_name = get_course_id_to_name(courses_by_quarter_filtered)
+
+            print("PRINTING course schedule...")
+            print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n")
+            for i in range(7):
+                season = INDEX_QUARTER[i % len(INDEX_QUARTER)]
+                print(f"** Quarter: {i + 1}, Season: {season} **")
+
+                quarter_schedule = assignment.get(f"Quarter {i + 1} classes")
+
+                if not quarter_schedule:
+                    print("Taking this quarter off!")
+                else:
+                    for course in quarter_schedule:
+                        print(
+                            f"Course: {course} {course_id_to_name[course]} || Units: 4"
+                        )
+
+                print()
+
+            print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+            print("END Course Scheduling.")
+        else:
+            print("CSP is unsolvable!")
 
 
 if __name__ == "__main__":
