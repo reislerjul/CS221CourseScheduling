@@ -1,44 +1,34 @@
-import os
 import pandas as pd
-from typing import List, Tuple
+from typing import List, Set, Tuple
 
 from ..course import Course
 from .degree_program import DegreeProgram, TOTAL_UNITS_REQUIRED
 
 
 class CSAIProgram(DegreeProgram):
-    def __init__(self, program_filepath):
+    def __init__(self, df_requirements: pd.DataFrame, verbose: int = 0):
         """
         Program requirements are based on https://cs.stanford.edu/degrees/mscs/programsheets/psguide2223.pdf
 
         Arguments:
-        program_filepath - path to file containing requirements for the degree program
+        df_requirements - DataFrame for degree program
         """
-        if not os.path.exists(program_filepath):
-            raise Exception(
-                f"Cannot find path to program requirements! {program_filepath} does not exist."
-            )
+        self.verbose = verbose
 
-        self.df_requirements = pd.read_csv(program_filepath)
         self.total_requirement_units_taken = 0
         self.seminar_units_taken = 0
-        self.courses_taken = set()
+        self.courses_taken: Set[str] = set()
 
         # Foundations
-        self.foundations = self.df_requirements[
-            self.df_requirements["Category"] == "foundation"
-        ]
-        self.foundations_areas_left = set(self.foundations["Subcategory"])
+        foundations = df_requirements[df_requirements["Category"] == "foundation"]
+        self.foundations_areas_left = set(foundations["Subcategory"])
         self.foundation_units_counted = 0
 
         # Breadth
-        self.breadth = self.df_requirements[
-            self.df_requirements["Category"] == "breadth"
-        ]
-        self.breadth_areas_left = set(self.breadth["Subcategory"])
+        breadth = df_requirements[df_requirements["Category"] == "breadth"]
+        self.breadth_areas_left = set(breadth["Subcategory"])
 
         # Depth
-        self.depth = self.df_requirements[self.df_requirements["Category"] == "depth"]
         self.depth_areas_left = {"a": 1, "b": 4, "c": 0}
         self.depth_units_left = 21
 
@@ -79,7 +69,8 @@ class CSAIProgram(DegreeProgram):
         """
         return self.total_requirement_units_taken >= TOTAL_UNITS_REQUIRED
 
-    def _is_seminar_course(self, course_code: str) -> bool:
+    @staticmethod
+    def _is_seminar_course(course_code: str) -> bool:
         """
         Check whether course is a seminar.
 
@@ -121,7 +112,7 @@ class CSAIProgram(DegreeProgram):
 
         # Seminars
         if self.seminar_units_taken <= 3:
-            return self._is_seminar_course(course_code)
+            return CSAIProgram._is_seminar_course(course_code)
 
         return False
 
@@ -137,7 +128,9 @@ class CSAIProgram(DegreeProgram):
             and self._is_unit_requirement_satisfied()
         )
 
-    def take_course(self, course_and_units: Tuple[Course, int]) -> None:
+    def take_course(
+        self, df_requirements: pd.DataFrame, course_and_units: Tuple[Course, int]
+    ) -> None:
         """
         Update the remaining requirements for the degree program object based on the course that is taken.
 
@@ -147,12 +140,15 @@ class CSAIProgram(DegreeProgram):
         course, units = course_and_units
         full_course_code = f"{course.course_subject} {course.course_number}"
 
-        requirements_satisfied = self.requirements_satisfied_by_course(course)
+        requirements_satisfied = self.requirements_satisfied_by_course(
+            df_requirements, course
+        )
 
         if not requirements_satisfied:
-            print(
-                f"WARNING: taking {full_course_code} but it doesn't satisfy any requirements..."
-            )
+            if self.verbose > 0:
+                print(
+                    f"WARNING: taking {full_course_code} but it doesn't satisfy any requirements..."
+                )
             self.courses_taken.add(full_course_code)
             return
 
@@ -176,33 +172,39 @@ class CSAIProgram(DegreeProgram):
             if category == "significant implementation":
                 self.significant_implementation_satisfied = True
 
-        if self._is_seminar_course(full_course_code):
+        if CSAIProgram._is_seminar_course(full_course_code):
             units_towards_degree = min(units, 3 - self.seminar_units_taken)
             self.seminar_units_taken += units_towards_degree
 
         self.total_requirement_units_taken += units_towards_degree
         self.courses_taken.add(full_course_code)
 
-    def waive_course(self, course: Course) -> None:
+    def waive_course(self, df_requirements: pd.DataFrame, course: Course) -> None:
         """
         Update the remaining requirements for the degree program object based on the course that is waived.
 
         Arguments:
         course_and_units - A course object. Eg <CS 221 object>.
         """
+        foundations = df_requirements[df_requirements["Category"] == "foundation"]
+
         full_course_code = f"{course.course_subject} {course.course_number}"
-        if full_course_code not in set(self.foundations["Course"]):
+        if full_course_code not in set(foundations["Course"]):
             raise Exception(
                 f"Tried to waive {full_course_code}, but cannot waive a non-foundation course."
             )
 
-        areas_satisfied = self.foundations.loc[
-            self.foundations["Course"] == full_course_code
-        ]["Subcategory"].to_list()
+        foundations = df_requirements[df_requirements["Category"] == "foundation"]
+
+        areas_satisfied = foundations.loc[foundations["Course"] == full_course_code][
+            "Subcategory"
+        ].to_list()
         for area in areas_satisfied:
             self.foundations_areas_left = self.foundations_areas_left - {area}
 
-    def requirements_satisfied_by_course(self, course: Course) -> List[Tuple[str, str]]:
+    def requirements_satisfied_by_course(
+        self, df_requirements: pd.DataFrame, course: Course
+    ) -> List[Tuple[str, str]]:
         """
         Returns a list of the remaining requirements that are satisfied by the course.
 
@@ -213,9 +215,7 @@ class CSAIProgram(DegreeProgram):
         requirements_satisfied - A list of all the requirement/sub-requirements pairs that are satisfied by the course.
         """
         full_course_code = f"{course.course_subject} {course.course_number}"
-        df_course = self.df_requirements.loc[
-            self.df_requirements["Course"] == full_course_code
-        ]
+        df_course = df_requirements.loc[df_requirements["Course"] == full_course_code]
 
         requirements_satisfied = []
 

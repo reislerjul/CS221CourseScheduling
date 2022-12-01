@@ -1,32 +1,32 @@
 ,Course,Category,Subcategory
 0,CS 103,foundation,logic
 1,CS 109,foundation,probability
-2,Stat 116,foundation,probability
+2,STATS 116,foundation,probability
 3,CME 106,foundation,probability
 4,MS&E 220,foundation,probability
 5,EE 178,foundation,probability
 6,CS 161,foundation,algorithm
 7,CS 107,foundation,organ
 8,CS 107E,foundation,organ
-9,CS 110,foundation,systems
-10,CS 111,foundation,systems
-11,CS 140,significant implementation,
-12,CS 212,significant implementation,
-13,CS 140E,significant implementation,
-14,CS 143,significant implementation,
-15,CS 144,significant implementation,
-16,CS 145,significant implementation,
-17,CS 148,significant implementation,
-18,CS 151,significant implementation,
-19,CS 190,significant implementation,
-20,CS 210B,significant implementation,
-21,CS 221,significant implementation,
-22,CS 227B,significant implementation,
-23,CS 231N,significant implementation,
-24,CS 243,significant implementation,
-25,CS 248,significant implementation,
-26,CS 248A,significant implementation,
-27,CS 341,significant implementation,
+9,CS 110,foundation,foundation systems
+10,CS 111,foundation,foundation systems
+11,CS 140,significant implementation,significant implementation
+12,CS 212,significant implementation,significant implementation
+13,CS 140E,significant implementation,significant implementation
+14,CS 143,significant implementation,significant implementation
+15,CS 144,significant implementation,significant implementation
+16,CS 145,significant implementation,significant implementation
+17,CS 148,significant implementation,significant implementation
+18,CS 151,significant implementation,significant implementation
+19,CS 190,significant implementation,significant implementation
+20,CS 210B,significant implementation,significant implementation
+21,CS 221,significant implementation,significant implementation
+22,CS 227B,significant implementation,significant implementation
+23,CS 231N,significant implementation,significant implementation
+24,CS 243,significant implementation,significant implementation
+25,CS 248,significant implementation,significant implementation
+26,CS 248A,significant implementation,significant implementation
+27,CS 341,significant implementation,significant implementation
 28,CS 154,breadth,theory
 29,CS 157,breadth,theory
 30,CS 168,breadth,theory

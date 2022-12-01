@@ -1,0 +1,17 @@
+internship: True
+breadth_areas: # Note: applications will always be satisfied, so we don't need to include it. Options are systems, society, and theory
+  #- systems
+  - society
+  - theory
+foundations_not_satisfied: # For simplicity in the CSP, at most 2 foundations can be unsatisfied
+  #- logic
+  - probability
+  #- algorithm
+  #- organ
+  - foundation systems
+
+subject_requests:
+  #robotics: 1
+  #nlp: 1
+  #vision: 1
+  health: 3

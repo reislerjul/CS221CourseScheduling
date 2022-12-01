@@ -98,6 +98,7 @@ class CoursesDeterministic:
                             "course_number": str(course.code),
                             "course_name": course.title,
                             "course_subject": course.subject,
+                            "course_description": course.description,
                         }
 
                         total_term = set()
@@ -171,6 +172,7 @@ class CoursesDeterministic:
                             row["course_name"],
                             row["course_subject"],
                             self.find_course_category(row["course_number"]),
+                            row["course_description"],
                             tuple(set(terms)),
                         )
                     # Add same courses offered in the new year

@@ -23,6 +23,7 @@ class Course:
         course_name: str,
         course_subject: str,
         course_category: str,
+        course_description: str,
         quarter_indices: Tuple,
     ) -> None:
 
@@ -32,6 +33,7 @@ class Course:
         self.course_name = course_name
         self.course_subject = course_subject
         self.course_category = course_category
+        self.course_description = course_description
         self.quarter_indices = quarter_indices
 
 
