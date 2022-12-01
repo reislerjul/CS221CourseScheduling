@@ -132,7 +132,11 @@ def main(
             if student_config["foundations_not_satisfied"]
             else []
         )
-        custom_requests = student_config["subject_requests"]
+        custom_requests = (
+            student_config["subject_requests"]
+            if student_config["subject_requests"]
+            else {}
+        )
 
         if len(breadth_to_satisfy) != 2:
             raise Exception(
@@ -268,8 +272,8 @@ def main(
                         )
 
                     take_seminar = random.random() <= 0.5
-                    if take_seminar:
-                        seminar_courses_quarter = seminar_courses_one_unit[i + 1]
+                    seminar_courses_quarter = seminar_courses_one_unit[i + 1]
+                    if take_seminar and len(seminar_courses_quarter) > 0:
                         seminar = random.sample(seminar_courses_quarter, 1)[0]
                         seminar_id = f"{seminar.course_subject} {seminar.course_number}"
                         print(f"Course: {seminar_id} {seminar.course_name} || Units: 1")
