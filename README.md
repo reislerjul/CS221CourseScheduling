@@ -5,7 +5,8 @@ Repository for the CS 221 course scheduling project.
 $ python schedule_courses.py --help
 usage: ScheduleCourses [-h] [-d DATA_DIRECTORY] [-p PROGRAM]
                        [-y YEARS [YEARS ...]] [-mq MAX_QUARTER]
-                       [-ms MAX_SUCCESSORS] [-v VERBOSE]
+                       [-ms MAX_SUCCESSORS] [-m MODEL] [-c CONFIG_NAME]
+                       [-v VERBOSE]
 
 Create a course schedule for a two year Stanford MS program.
 
@@ -15,7 +16,7 @@ optional arguments:
                         The local directory where course data is stored.
                         Defaults to "data/".
   -p PROGRAM, --program PROGRAM
-                        The degree program. Should be in {CS, EE, ICME}.
+                        The degree program. Should be in {CS, EE, CME}.
                         Defaults to "CS".
   -y YEARS [YEARS ...], --years YEARS [YEARS ...]
                         The program years. Each year should be formatted as
@@ -25,14 +26,29 @@ optional arguments:
   -ms MAX_SUCCESSORS, --max_successors MAX_SUCCESSORS
                         The maximum number of successors to return from
                         successors_and_cost.
+  -m MODEL, --model MODEL
+                        Whether to model the problem as a search problem or
+                        CSP.
+  -c CONFIG_NAME, --config_name CONFIG_NAME
+                        The config filename corresponding to a student's
+                        schedule requests.
   -v VERBOSE, --verbose VERBOSE
                         Whether to run UCS in verbose mode.
 ```
 
 ## Running Course Scheduling
-Example usage:
+Note that for both Search and CSP, the program can take >10 minutes to find a solution.
+
+By default, `schedule_courses` uses the CSP model and the student profile found at `profile1.yaml`. To run this default case,
+don't set any command line arguments:
 ```
-python schedule_courses.py -d data -p CS -y 2021-2022 2022-2023
+python schedule_courses.py
+```
+You can change the student profile to anything in the `configs` folder by using the `--config_name` argument.
+
+To run the Search model, use the `--model` argument:
+```
+python schedule_courses.py --model search
 ```
 
 ## Setup
