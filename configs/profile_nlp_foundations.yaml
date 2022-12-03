@@ -12,6 +12,6 @@ foundations_not_satisfied: # For simplicity in the CSP, at most 2 foundations ca
 
 subject_requests:
   #robotics: 2
-  nlp: 5
+  nlp: 3
   #vision: 2
   #health: 2
